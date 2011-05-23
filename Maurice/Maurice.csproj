@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B9889782-F010-45F7-A937-D2A352D3958D}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Manina.Windows.Forms</RootNamespace>
+    <AssemblyName>Maurice</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ApplicationIcon>ImageListView.ico</ApplicationIcon>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>0</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DesignerDebug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DesignerDebug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <WarningLevel>0</WarningLevel>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AngleAltitudeControls">
+      <HintPath>..\..\..\..\..\..\..\dev\CSharp\AngleAltitudeControls\AngleAltitudeControls.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Client">
+      <HintPath>..\..\google-gdata\clients\cs\samples\spreadsheets\bin\Debug\Google.GData.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Extensions">
+      <HintPath>..\..\google-gdata\clients\cs\samples\spreadsheets\bin\Debug\Google.GData.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Spreadsheets">
+      <HintPath>..\..\google-gdata\clients\cs\samples\spreadsheets\bin\Debug\Google.GData.Spreadsheets.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel.Web">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WizardBase">
+      <HintPath>..\..\..\..\..\..\..\dev\CSharp\Wizard\WizardDemo2\WizardDemo\WizardDemo\bin\Debug\WizardBase.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Category.cs" />
+    <Compile Include="CategoryManager.cs" />
+    <Compile Include="communConfig.cs" />
+    <Compile Include="ConfigManager.cs" />
+    <Compile Include="CopyPasteManager.cs" />
+    <Compile Include="DemoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DemoForm.Designer.cs">
+      <DependentUpon>DemoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DirUtil.cs" />
+    <Compile Include="ExportExcel\ExcelExporter.cs" />
+    <Compile Include="FAddChildCategory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FAddChildCategory.Designer.cs">
+      <DependentUpon>FAddChildCategory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FCategoryDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FCategoryDialog.Designer.cs">
+      <DependentUpon>FCategoryDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FChoosePhotographer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FChoosePhotographer.Designer.cs">
+      <DependentUpon>FChoosePhotographer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FFindCustomerByDate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FFindCustomerByDate.Designer.cs">
+      <DependentUpon>FFindCustomerByDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FilenamePhotoProvider.cs" />
+    <Compile Include="GlobalConfig.cs" />
+    <Compile Include="keyboardSimulator\KeyboardSimulator.cs" />
+    <Compile Include="network\DownloadDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="network\DownloadDialog.designer.cs">
+      <DependentUpon>DownloadDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="network\LicenceControler.cs" />
+    <Compile Include="network\LicenceQuery.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="network\LicenceQuery.designer.cs">
+      <DependentUpon>LicenceQuery.cs</DependentUpon>
+    </Compile>
+    <Compile Include="network\VersionChecker.cs" />
+    <Compile Include="NodeView\NodeCategory.cs" />
+    <Compile Include="NodeView\NodeConfig.cs" />
+    <Compile Include="NodeView\NodeInfo.cs" />
+    <Compile Include="NodeView\NodeMultiLangue.cs" />
+    <Compile Include="NodeView\NodePhotographer.cs" />
+    <Compile Include="NodeView\NodePrice.cs" />
+    <Compile Include="NodeView\NodesBase.cs" />
+    <Compile Include="NodeView\NodesCategory.cs" />
+    <Compile Include="NodeView\NodesInfo.cs" />
+    <Compile Include="NodeView\NodesPhotographer.cs" />
+    <Compile Include="NodeView\NodesUser.cs" />
+    <Compile Include="NodeView\NodeUser.cs" />
+    <Compile Include="Photographer.cs" />
+    <Compile Include="PhotographerManager.cs" />
+    <Compile Include="PhotoPromotionEntry.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PhotoPromotionEntry.Designer.cs">
+      <DependentUpon>PhotoPromotionEntry.cs</DependentUpon>
+    </Compile>
+    <Compile Include="printandCommandControler\PrintAndCommandControler.cs" />
+    <Compile Include="ProductControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ProductControl.Designer.cs">
+      <DependentUpon>ProductControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="thumbnail\ThumbnailMaker.cs" />
+    <Compile Include="wizard\FWizardImport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="wizard\FWizardImport.Designer.cs">
+      <DependentUpon>FWizardImport.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="DemoForm.resx">
+      <DependentUpon>DemoForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FAddChildCategory.resx">
+      <DependentUpon>FAddChildCategory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FCategoryDialog.resx">
+      <DependentUpon>FCategoryDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FChoosePhotographer.resx">
+      <DependentUpon>FChoosePhotographer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FFindCustomerByDate.resx">
+      <DependentUpon>FFindCustomerByDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="network\DownloadDialog.resx">
+      <DependentUpon>DownloadDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="network\LicenceQuery.resx">
+      <DependentUpon>LicenceQuery.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PhotoPromotionEntry.resx">
+      <DependentUpon>PhotoPromotionEntry.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductControl.resx">
+      <DependentUpon>ProductControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="wizard\FWizardImport.resx">
+      <DependentUpon>FWizardImport.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ImageListView.ico" />
+    <None Include="Resources\Purse Icon.jpg" />
+    <None Include="Resources\Delete %281%291.ico" />
+    <None Include="Resources\Profile.ico" />
+    <None Include="Resources\Print.ico" />
+    <None Include="Resources\Delete %281%29.ico" />
+    <None Include="Resources\Add.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ExcelExample\EPPlus-69409\trunk\ExcelPackage\EPPlus.csproj">
+      <Project>{7B288026-5502-4A39-BF41-77E086F3E4A3}</Project>
+      <Name>EPPlus</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ImageListView\ImageListView.csproj">
+      <Project>{0C295FB8-C6C6-4A40-9F19-05A43F353A04}</Project>
+      <Name>Maurce</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SheelLib\SheelLib.csproj">
+      <Project>{BDCD0ED8-E791-47F1-8AEE-1CBAEE7AE97F}</Project>
+      <Name>SheelLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
