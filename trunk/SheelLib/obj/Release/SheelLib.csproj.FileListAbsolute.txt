@@ -1,0 +1,5 @@
+C:\Users\c\Documents\Visual Studio 2010\Projects\imagelistview\SheelLib\bin\Release\SheelLib.dll
+C:\Users\c\Documents\Visual Studio 2010\Projects\imagelistview\SheelLib\bin\Release\SheelLib.pdb
+C:\Users\c\Documents\Visual Studio 2010\Projects\imagelistview\SheelLib\obj\Release\ResolveAssemblyReference.cache
+C:\Users\c\Documents\Visual Studio 2010\Projects\imagelistview\SheelLib\obj\Release\SheelLib.dll
+C:\Users\c\Documents\Visual Studio 2010\Projects\imagelistview\SheelLib\obj\Release\SheelLib.pdb
