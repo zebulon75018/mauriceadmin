@@ -15,12 +15,16 @@ using System.Collections;
 
 using Manina.Windows.Forms.NodeView;
 using ShellLib;
+using System.Xml;
+using System.Text.RegularExpressions;
 
 namespace Manina.Windows.Forms.ExportExcel
 {
     class ExcelExporter
     {
         int idFacture = 0;
+        private const Int32 STARTING_ROW = 11;
+
         public ExcelExporter()
         {
         }
@@ -29,6 +33,9 @@ namespace Manina.Windows.Forms.ExportExcel
         {
             try
             {
+                if (!File.Exists("idfacture.txt"))
+                    File.WriteAllText("idfacture.txt", "0");
+
                 StreamReader sr = new StreamReader("idfacture.txt");
                 String content = sr.ReadToEnd();
                 int result = Int32.Parse(content);
@@ -47,111 +54,218 @@ namespace Manina.Windows.Forms.ExportExcel
             }
         }
 
-        public void ExcelCustomer(NodeUser user,NodePrice price)
+
+        public void ExcelCustomer(NodeUser user, NodePrice price)
         {
+
+            // On va générer une facture excel à partir des données de l'utilisateur (sa commande)
+            // et des données référence des prix (NodePrice)
+
             ConfigManager cm = ConfigManager.getSingleton();
-            using (ExcelPackage p = new ExcelPackage(new FileInfo(cm.getExcelTemplateFile()), true))
+
+            if (File.Exists(cm.getExcelTemplateFile()))
             {
-                //Set up the headers
-                ExcelWorksheet ws = p.Workbook.Worksheets[1];               
-
-                int nbphoto = user.NbPhoto();
-                idFacture = nbIDFacture();
-
-                ws.Cells["C6"].Value = user.chamberNumber.ToString();
-                ws.Cells["C4"].Value = user.name;
-                ws.Cells["C5"].Value = user.firstname;
-                ws.Cells["B2"].Value = idFacture;
-                ws.Cells["C7"].Value = user.LeavingDate;
-                int step = 11;
-                double finalPrise = 0;
-                double finalPriseDollar = 0;
-
-                IDictionary formatPhoto = new Dictionary<string, int>();
-
-                for (int n = 0; n < nbphoto; n++)
+                using (ExcelPackage p = new ExcelPackage(new FileInfo(cm.getExcelTemplateFile()), true))
                 {
+                    //Set up the headers
+                    ExcelWorksheet ws = p.Workbook.Worksheets[1];
 
-                    if (formatPhoto.Contains(user.FormatPhoto(n)))
+                    int nbphoto = user.NbPhoto();
+                    idFacture = nbIDFacture();
+
+                    // Identification de la facture
+                    ws.Cells["B1"].Value = String.Format("FACTURE N° {0}", idFacture.ToString().PadLeft(6, '0'));
+                    ws.Cells["B2"].Value = DateTime.Today.ToString("yyyy-MM-dd");
+
+                    // Identification du client
+                    ws.Cells["C6"].Value = user.chamberNumber.ToString();
+                    ws.Cells["C4"].Value = user.name;
+                    ws.Cells["C5"].Value = user.firstname;
+                    ws.Cells["C7"].Value = user.LeavingDate;
+
+                    #region Ici, on va générer tous les tableaux de données qui seront utilisés pour la suite de la construction du fichier excel
+
+                    List<OrderedItem> listForfaitsDivers = new List<OrderedItem>();
+
+                    for (int i = 0; i < price.NbForfaits(); i++)
                     {
-                        formatPhoto[user.FormatPhoto(n)] = ((int)formatPhoto[user.FormatPhoto(n)]) + 1;
+                        XmlNode n = price.getForfait(i);
+
+                        OrderedItem item = new OrderedItem();
+                        item.Name = XMLTools.GetAttributeStringValue(n, "name");
+
+                        listForfaitsDivers.Add(item);
                     }
-                    else
+
+                    Int32 TotalPhotoCD = 0;
+                    Int32 TotalPhotoTirage = 0;
+
+                    List<OrderedItem> listFormatPhotos = new List<OrderedItem>();
+                    List<OrderedItem> listMerchandising = new List<OrderedItem>();
+
+                    for (int i = 0; i < price.NbProduct(); i++)
                     {
-                        formatPhoto.Add(user.FormatPhoto(n), 1);
+                        XmlNode n = price.getProduct(i);
+
+                        String formatPhoto = XMLTools.GetAttributeStringValue(n, "formatphoto");
+
+                        if (formatPhoto.ToLower() == "true")
+                        {
+                            OrderedItem item = new OrderedItem();
+                            String currentFormatName = XMLTools.GetAttributeStringValue(n, "name");
+                            item.Name = GetFormatDisplayName(currentFormatName);
+                            item.UnitPrice = XMLTools.GetAttributePriceValue(n, "price");
+
+                            // parcourir la commande utilisateur pour déterminer les quantités !!
+                            // pour chaque photo commandée par l'utilisateur
+                            for (int j = 0; j < user.NbPhoto(); j++)
+                            {
+                                XmlNode img = user.GetPhoto(j);
+
+                                // on regarde si le format actuel a été commandé et si oui, en combien d'exemplaires
+                                String strOrderedQuantity = XMLTools.GetAttributeStringValue(img, currentFormatName);
+
+                                // Le format a été commandé, on va récupérer le chiffre et l'ajouter à la quantité de photos commandées
+                                if (!String.IsNullOrEmpty(strOrderedQuantity))
+                                {
+                                    Int32 qty = 0;
+                                    Int32.TryParse(strOrderedQuantity, out qty);
+
+                                    item.Quantity += qty;
+                                    TotalPhotoTirage += qty;
+                                }
+                            }
+
+                            listFormatPhotos.Add(item);
+                        }
+                        else
+                        {
+                            OrderedItem item = new OrderedItem();
+
+                            String currentFormatName = XMLTools.GetAttributeStringValue(n, "name");
+
+                            item.Name = XMLTools.GetAttributeStringValue(n, "description");
+                            if (item.Name == String.Empty)
+                                item.Name = currentFormatName;
+                            item.UnitPrice = XMLTools.GetAttributePriceValue(n, "price");
+
+                            // parcourir la commande utilisateur pour déterminer les quantités !!
+                            // pour chaque photo commandée par l'utilisateur
+                            for (int j = 0; j < user.NbPhoto(); j++)
+                            {
+                                XmlNode img = user.GetPhoto(j);
+
+                                // on regarde si le format actuel a été commandé et si oui, en combien d'exemplaires
+                                String strOrderedQuantity = XMLTools.GetAttributeStringValue(img, currentFormatName);
+
+                                // Le format a été commandé, on va récupérer le chiffre et l'ajouter à la quantité de photos commandées
+                                if (!String.IsNullOrEmpty(strOrderedQuantity))
+                                {
+                                    Int32 qty = 0;
+                                    Int32.TryParse(strOrderedQuantity, out qty);
+
+                                    item.Quantity += qty;
+                                }
+                            }
+                            listMerchandising.Add(item);
+                        }
                     }
-                }
-                int nc=0;
-                foreach (string format in formatPhoto.Keys)
-                 {                                    
-                    ws.Cells["A" + (nc + step).ToString()].Value = format;
-                    ws.Cells["C" + (nc + step).ToString()].Value = formatPhoto[format];
-                    ws.Cells["D" + (nc + step).ToString()].Value = ((int)formatPhoto[format]) * cm.Price(format);
-                    finalPrise += cm.Price(format);                                         
-                    //ws.Cells["E" + (n + step).ToString()].Value = cm.PriceDollar(user.FormatPhoto(n));
-                    finalPriseDollar += cm.PriceDollar(format);
-                    nc++;
-                 }
-                
-                    //ws.Cells["B" + (n + step).ToString()].Value = user.FilenamePhoto(n);
-                                
-                if (user.orderCD)
-                {
+
+                    // avant de finir, on reparcours encore la commande utilisateur pour calculer le nombre d'images commandées sur CD (minimum 10 normalement, mais ça c'est censé etre checké en amont)
+                    for (int j = 0; j < user.NbPhoto(); j++)
+                    {
+                        XmlNode img = user.GetPhoto(j);
+                        // On en profite également pour regarder si la photo a été commandée sur CD
+                        // Dans ce cas, on incrément le compteur. cela nous permettra de calculer le prix de revient du CD
+                        String strImageOnCD = XMLTools.GetAttributeStringValue(img, "imageoncd");
+
+                        if (strImageOnCD.ToLower() == "true")
+                        {
+                            TotalPhotoCD++;
+                        }
+                    }
+
+
+                    // Maintenant on détermine les remises auxquelles l'utilisateur a le droit
+                    String strPromoList = String.Empty;
+                    Int32 pourcentageRemise = 0;
+                    for (int i = 0; i < price.NbPromotion(); i++)
+                    {
+                        XmlNode n = price.getPromotion(i);
+
+                        if (!String.IsNullOrEmpty(strPromoList))
+                            strPromoList += " / ";
+
+                        Int32 nbPhotos = XMLTools.GetAttributeIntValue(n, "nbphoto");
+                        Int32 montantReduction = XMLTools.GetAttributeIntValue(n, "promotion");
+
+                        strPromoList += String.Format("{0} P={1}%", nbPhotos.ToString(), montantReduction.ToString());
+                        
+                        
+                        if (TotalPhotoTirage >= nbPhotos && pourcentageRemise < montantReduction)
+                        {
+                            pourcentageRemise = montantReduction;
+                        }
+                    }
+
+                    #endregion
+
+                    // On va itérer sur chaque format de photo disponible
+                    int row = STARTING_ROW;
+
+                    createCategoryRows(ref ws, row, listFormatPhotos);
+                    row += listFormatPhotos.Count - 1;
+
+                    createSubTotalRow(ref ws, ++row);
+                    createRemiseRow(ref ws, ++row, 0.0, pourcentageRemise); // remise à calculer
+                    createTotalRow(ref ws, ++row);
+  
+                    //createPromotionListRow(ref ws, ++row, strPromoList);
+
+                    // Formules photos
+                    List<OrderedItem> listFormulesPhotos = new List<OrderedItem>();
+                    listFormulesPhotos.Add(new OrderedItem() { Name = "Fichiers numériques sur CD", Quantity = TotalPhotoCD, UnitPrice = cm.PrixFichierNumerique() });
                     
-                    ws.Cells["A" + (nbphoto + step).ToString()].Value = "CD";
-                    ws.Cells["D" + (nbphoto + step).ToString()].Value = cm.PriceCD();
-                    finalPrise += cm.PriceCD();
-                    //ws.Cells["E" + (nbphoto + step).ToString()].Value = cm.PriceCDDollar();
-                    finalPriseDollar += cm.PriceCDDollar();
-                    nbphoto += 1;
-                }
+                    createCategoryRows(ref ws, ++row, listFormulesPhotos);
+                    row += listFormulesPhotos.Count - 1;
+                    createInterCategoryRow(ref ws, ++row);
 
-                ws.Cells["B" + (nbphoto + step).ToString()].Value = "Total";
-                ws.Cells["D" + (nbphoto + step).ToString()].Value = finalPrise;
-                //ws.Cells["E" + (nbphoto + step).ToString()].Value = finalPriseDollar;
-                /*
-                ws.Cells["A20"].Value = "Date";
-                ws.Cells["B20"].Value = "EOD Rate";
-                ws.Cells["B20:D20"].Merge = true;
-                ws.Cells["E20"].Value = "Change";
-                ws.Cells["E20:G20"].Merge = true;
-                ws.Cells["B20:E20"].Style.HorizontalAlignment = ExcelHorizontalAlignment.CenterContinuous;
-                using (ExcelRange row = ws.Cells["A20:G20"])
-                {
-                    row.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    row.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(23, 55, 93));
-                    row.Style.Font.Color.SetColor(Color.White);
-                    row.Style.Font.Bold = true;
-                }
-                ws.Cells["B21"].Value = "USD/JPY";
-                ws.Cells["C21"].Value = "USD/EUR";
-                ws.Cells["D21"].Value = "USD/GBP";
-                ws.Cells["E21"].Value = "USD/JPY";
-                ws.Cells["F21"].Value = "USD/EUR";
-                ws.Cells["G21"].Value = "USD/GBP";
-                using (ExcelRange row = ws.Cells["A21:G21"])
-                {
-                    row.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    row.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(184, 204, 228));
-                    row.Style.Font.Color.SetColor(Color.Black);
-                    row.Style.Font.Bold = true;
-                }
-                 * */
-                Byte[] bin = p.GetAsByteArray();
+                    // merchandising
+                    createCategoryRows(ref ws, ++row, listMerchandising);
+                    row += listMerchandising.Count - 1;
+                    createInterCategoryRow(ref ws, ++row);
 
-                string file = cm.getExcelFile() + idFacture.ToString() + ".xlsx";//.getExcelFile();
-                try
-                {
-                    File.WriteAllBytes(file, bin);
-                    ShellExecute se = new ShellExecute();
-                    //se.Verb = ShellExecute.PrintFile;
-                    se.Path = file;
-                    se.Execute();                    
+                    // forfaits divers
+                    createCategoryRows(ref ws, ++row, listForfaitsDivers, false);
+                    row += listForfaitsDivers.Count - 1;		
+
+
+                    // FINALLY
+                    // LE GRAND TOTAL
+                    createMainTotalQuantiteRow(ref ws, ++row, listFormatPhotos);
+                    createMainTotalTtcRow(ref ws, ++row, listFormatPhotos);
+                    createMainTVARow(ref ws, ++row);
+
+                    Byte[] bin = p.GetAsByteArray();
+
+                    string file = String.Format("{0}\\{1}-{2}.{3}.{4}-{5}.xlsx", user.getDirectory(), idFacture.ToString().PadLeft(5, '0'), user.name, user.firstname, user.chamberNumber, DateTime.Now.ToString("yyyyMMdd"));
+                    try
+                    {
+                        File.WriteAllBytes(file, bin);
+                        ShellExecute se = new ShellExecute();
+                        //se.Verb = ShellExecute.PrintFile;
+                        se.Path = file;
+                        se.Execute();
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show("Error Exporting Excel " + e.Message);
+                    }
                 }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Error Exporting Excel " + e.Message);
-                }
+            }
+            else
+            {
+                MessageBox.Show("Unable to open template file located at : \"" + cm.getExcelTemplateFile() + "\". Please check the file and try again.");
             }
         }
 
@@ -161,23 +275,351 @@ namespace Manina.Windows.Forms.ExportExcel
 
             for (int n = 0; n < price.NbProduct(); n++)
             {
-               // XmlNode
+                // XmlNode
                 //nodePrice.getProduct(n)
             }
             return result;
-        }        
+        }
 
         public void ExcelAddCommand()
         {
             using (ExcelPackage p = new ExcelPackage(new FileInfo(@"c:\dev\command.xlsx")))
             {
-                ExcelWorksheet ws = p.Workbook.Worksheets[1];       
+                ExcelWorksheet ws = p.Workbook.Worksheets[1];
                 //ws.Cells[
             }
         }
 
         public void ExcelAddPrint()
         {
+        }
+
+        #region Create Rows
+
+        private void createInterCategoryRow(ref ExcelWorksheet ws, Int32 row)
+        {
+            ExcelRange cell = ws.Cells[String.Format("C{0}:E{0}", row)];
+            cell.Merge = true;
+            setCellDisabled(ref cell);
+            setCellBoxed(ref cell);
+        }
+
+        private void createCategoryRows(ref ExcelWorksheet ws, Int32 row, List<OrderedItem> list, Boolean fillValues = true)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                Boolean isFirstLine = (i == 0);
+                Boolean isLastLine = (i == (list.Count - 1));
+
+                OrderedItem item = list[i];
+
+                ExcelRange cellLibelle = ws.Cells["A" + row];
+                ExcelRange cellQuantity = ws.Cells["C" + row];
+                ExcelRange cellPrice = ws.Cells["D" + row];
+                ExcelRange cellTotal = ws.Cells["E" + row];
+
+                cellLibelle.Value = item.Name;
+
+                if (fillValues)
+                    cellQuantity.Value = item.Quantity;
+
+                if (fillValues)
+                    cellPrice.Value = item.UnitPrice;
+                setCellPriceFormat(ref cellPrice);
+
+                if (fillValues)
+                    cellTotal.Formula = String.Format("C{0}*D{0}", row);
+                else
+                    cellTotal.Value = 0.00;
+                setCellPriceFormat(ref cellTotal);
+
+                if (isFirstLine)
+                {
+                    setCellPriceTop(ref cellQuantity);
+                    setCellPriceTop(ref cellPrice);
+                    setCellPriceTop(ref cellTotal);
+                }
+                else if (isLastLine)
+                {
+                    setCellPriceBottom(ref cellQuantity);
+                    setCellPriceBottom(ref cellPrice);
+                    setCellPriceBottom(ref cellTotal);
+                }
+                else
+                {
+                    setCellPriceMiddle(ref cellQuantity);
+                    setCellPriceMiddle(ref cellPrice);
+                    setCellPriceMiddle(ref cellTotal);
+                }
+
+                cellQuantity.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                cellQuantity.Style.Font.Bold = true;
+
+                row++;
+            }
+        }
+
+        private void createSubTotalRow(ref ExcelWorksheet ws, Int32 row)
+        {
+            // Puis on va créer les cellules de total
+            // On sait où on en est grace à row
+            ExcelRange cellSubTotalLib = ws.Cells["B" + row];
+            ExcelRange cellSubTotalCount = ws.Cells["C" + row];
+            ExcelRange cellSubTotalUnitPrice = ws.Cells["D" + row];
+            ExcelRange cellSubTotalPrice = ws.Cells["E" + row];
+
+            cellSubTotalLib.Value = "Sous Total";
+            setCellStandard(ref cellSubTotalLib);
+            cellSubTotalLib.Style.Font.Bold = true;
+            cellSubTotalLib.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+            cellSubTotalCount.Formula = String.Format("SUM(C{0}:C{1})", STARTING_ROW, (row - 1));
+            setCellBoxed(ref cellSubTotalCount);
+            cellSubTotalCount.Style.Font.Bold = true;
+            cellSubTotalCount.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+            cellSubTotalUnitPrice.Value = String.Empty;
+            setCellBoxed(ref cellSubTotalUnitPrice);
+            setCellDisabled(ref cellSubTotalUnitPrice);
+
+            cellSubTotalPrice.Formula = String.Format("SUM(E{0}:E{1})", STARTING_ROW, (row - 1));
+            setCellBoxed(ref cellSubTotalPrice);
+            setCellPriceFormat(ref cellSubTotalPrice);
+            cellSubTotalPrice.Style.Font.Bold = false;
+        }
+
+        private void createRemiseRow(ref ExcelWorksheet ws, Int32 row, Double remise, Int32 percentRemise)
+        {
+            // Puis on va créer les cellules de total
+            // On sait où on en est grace à row
+            ExcelRange cellSubTotalLib = ws.Cells["B" + row];
+            ExcelRange cellSubTotalCount = ws.Cells["C" + row];
+            ExcelRange cellSubTotalUnitPrice = ws.Cells["D" + row];
+            ExcelRange cellSubTotalPrice = ws.Cells["E" + row];
+
+            cellSubTotalLib.Value = "Remise";
+            setCellStandard(ref cellSubTotalLib);
+            cellSubTotalLib.Style.Font.Bold = true;
+            cellSubTotalLib.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+            cellSubTotalCount.Value = String.Empty;
+            setCellStandard(ref cellSubTotalCount);
+            setCellDisabled(ref cellSubTotalCount);
+
+            cellSubTotalUnitPrice.Value = String.Empty;
+            setCellStandard(ref cellSubTotalUnitPrice);
+            setCellDisabled(ref cellSubTotalUnitPrice);
+
+            cellSubTotalPrice.Formula = String.Format("E{0}*C{1}", row - 1, row);
+            setCellStandard(ref cellSubTotalPrice);
+            setCellBoxed(ref cellSubTotalPrice);
+            setCellPriceFormat(ref cellSubTotalPrice);
+            cellSubTotalPrice.Style.Font.Bold = false;
+
+            ExcelRange cellQtyPrice = ws.Cells[row, 3, row, 4];
+            cellQtyPrice.Merge = true;
+            setCellBoxed(ref cellQtyPrice);
+            cellQtyPrice.Value = String.Format("{0}%", percentRemise);
+            cellQtyPrice.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            cellQtyPrice.Style.Font.Bold = true;
+        }
+
+        private void createTotalRow(ref ExcelWorksheet ws, Int32 row)
+        {
+            // Puis on va créer les cellules de total
+            // On sait où on en est grace à row
+            ExcelRange cellSubTotalLib = ws.Cells["B" + row];
+            ExcelRange cellSubTotalCount = ws.Cells["C" + row];
+            ExcelRange cellSubTotalUnitPrice = ws.Cells["D" + row];
+            ExcelRange cellSubTotalPrice = ws.Cells["E" + row];
+
+            cellSubTotalLib.Value = "Total";
+            setCellStandard(ref cellSubTotalLib);
+            cellSubTotalLib.Style.Font.Bold = true;
+            cellSubTotalLib.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+            cellSubTotalCount.Value = String.Empty;
+            setCellStandard(ref cellSubTotalCount);
+            setCellDisabled(ref cellSubTotalCount);
+
+            cellSubTotalUnitPrice.Value = String.Empty;
+            setCellStandard(ref cellSubTotalUnitPrice);
+            setCellDisabled(ref cellSubTotalUnitPrice);
+
+            cellSubTotalPrice.Formula = String.Format("E{0}-E{1}", row - 2, row - 1);
+            setCellStandard(ref cellSubTotalPrice);
+            setCellBoxed(ref cellSubTotalPrice);
+            setCellPriceFormat(ref cellSubTotalPrice);
+            cellSubTotalPrice.Style.Font.Bold = false;
+
+            ExcelRange cellQtyPrice = ws.Cells[row, 3, row, 4];
+            cellQtyPrice.Merge = true;
+            setCellPriceBottom(ref cellQtyPrice);
+        }
+
+        private void createPromotionListRow(ref ExcelWorksheet ws, Int32 row, String content) {
+            // Puis on va créer les cellules de total
+            // On sait où on en est grace à row
+            ExcelRange mainCell = ws.Cells["A" + row + ":D" + row];
+            ExcelRange lastCell = ws.Cells["E" + row];
+
+            setCellStandard(ref mainCell);
+            mainCell.Value = content;
+            mainCell.Merge = true;
+
+            setCellDisabled(ref lastCell);
+            setCellBoxed(ref lastCell);
+            lastCell.Value = String.Empty;
+        }
+
+        #endregion
+
+        #region Rows Total Final
+
+        private void createMainTotalQuantiteRow(ref ExcelWorksheet ws, Int32 row, List<OrderedItem> list)
+        {
+            // Puis on va créer les cellules de total
+            // On sait où on en est grace à row
+            ExcelRange cellSubTotalLib = ws.Cells["B" + row];
+            ExcelRange cellSubTotalCount = ws.Cells["C" + row];
+            ExcelRange lastCell = ws.Cells[String.Format("D{0}:E{0}", row)];
+
+            cellSubTotalLib.Value = "Total quantité";
+            setCellStandard(ref cellSubTotalLib);
+            cellSubTotalLib.Style.Font.Bold = true;
+            cellSubTotalLib.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+            cellSubTotalCount.Formula = String.Format("C{0}+SUM(C{1}:C{2})", STARTING_ROW + list.Count - 1, STARTING_ROW + list.Count + 3, (row - 1));
+            setCellBoxed(ref cellSubTotalCount);
+            cellSubTotalCount.Style.Font.Bold = true;
+            cellSubTotalCount.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+            lastCell.Merge = true;
+            setCellDisabled(ref lastCell);
+            setCellBoxed(ref lastCell);
+        }
+
+        private void createMainTotalTtcRow(ref ExcelWorksheet ws, Int32 row, List<OrderedItem> list)
+        {
+            // Puis on va créer les cellules de total
+            // On sait où on en est grace à row
+            ExcelRange cellSubTotalLib = ws.Cells["B" + row];
+            ExcelRange firstCell = ws.Cells[String.Format("C{0}:D{0}", row)];
+            ExcelRange cellSubTotalPrice = ws.Cells["E" + row];
+
+            cellSubTotalLib.Value = "Total TTC MUR";
+            setCellStandard(ref cellSubTotalLib);
+            cellSubTotalLib.Style.Font.Bold = true;
+            cellSubTotalLib.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+            firstCell.Merge = true;
+            setCellDisabled(ref firstCell);
+            setCellBoxed(ref firstCell);
+
+            cellSubTotalPrice.Formula = String.Format("SUM(E{0}:E{1})", STARTING_ROW + list.Count + 2, (row - 1));
+            setCellStandard(ref cellSubTotalPrice);
+            setCellBoxed(ref cellSubTotalPrice);
+            setCellPriceFormat(ref cellSubTotalPrice);
+            cellSubTotalPrice.Style.Font.Bold = false;
+        }
+
+        private void createMainTVARow(ref ExcelWorksheet ws, Int32 row)
+        {
+            // Puis on va créer les cellules de total
+            // On sait où on en est grace à row
+            ExcelRange cellSubTotalLib = ws.Cells["B" + row];
+            ExcelRange firstCell = ws.Cells[String.Format("C{0}:D{0}", row)];
+            ExcelRange lastCell = ws.Cells["E" + row];
+
+            cellSubTotalLib.Value = "TVA 15%";
+            setCellStandard(ref cellSubTotalLib);
+            cellSubTotalLib.Style.Font.Bold = true;
+            cellSubTotalLib.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+            setCellDisabled(ref lastCell);
+            setCellBoxed(ref lastCell);
+
+            firstCell.Merge = true;
+            setCellBoxed(ref firstCell);
+            firstCell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            setCellPriceFormat(ref firstCell);
+            firstCell.Formula = String.Format("E{0}*0.85", row - 1); // 100% ttc - 15% tva = 0.85
+        }
+
+        #endregion
+
+        #region Cell Styles
+        private void setCellPriceTop(ref ExcelRange cell)
+        {
+            setCellPriceMiddle(ref cell);
+            cell.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+        }
+
+        private void setCellPriceMiddle(ref ExcelRange cell)
+        {
+            cell.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+            cell.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+            cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.General;
+        }
+
+        private void setCellPriceBottom(ref ExcelRange cell)
+        {
+            setCellPriceMiddle(ref cell);
+            cell.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+        }
+
+        private void setCellDisabled(ref ExcelRange cell)
+        {
+            cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            cell.Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+        }
+
+        private void setCellBoxed(ref ExcelRange cell)
+        {
+            setCellPriceTop(ref cell);
+            setCellPriceBottom(ref cell);
+        }
+
+        private void setCellStandard(ref ExcelRange cell)
+        {
+            cell.Style.Font.Bold = false;
+            cell.Style.Border.Bottom.Style = ExcelBorderStyle.None;
+            cell.Style.Border.Top.Style = ExcelBorderStyle.None;
+            cell.Style.Border.Left.Style = ExcelBorderStyle.None;
+            cell.Style.Border.Right.Style = ExcelBorderStyle.None;
+            cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.General;
+            cell.Style.Fill.PatternType = ExcelFillStyle.None;
+        }
+
+        private void setCellPriceFormat(ref ExcelRange cell)
+        {
+            cell.Style.Numberformat.Format = "# ##0.00  ";
+        }
+
+        #endregion
+
+        private String GetFormatDisplayName(String name)
+        {
+            if (!String.IsNullOrEmpty(name))
+            {
+                Regex r = new Regex("[^0-9]");
+                name = r.Replace(name, "");
+
+                if (name.Length > 2)
+                {
+                    name = "Photos format " + name.Substring(0, name.Length - 2) + "x" + name.Substring(name.Length - 2);
+                }
+                else
+                {
+                    name = "Photos format " + name;
+                }
+
+                return name;
+            }
+            else
+            {
+                return name;
+            }
         }
     }
 }

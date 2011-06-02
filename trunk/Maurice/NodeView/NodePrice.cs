@@ -10,7 +10,8 @@ namespace Manina.Windows.Forms.NodeView
     class NodePrice : NodesBase
     {
         protected XmlNode listProduct;
-        protected XmlNode listPromotion; 
+        protected XmlNode listPromotion;
+        protected XmlNode listForfaits;
         public NodePrice()
         {
             FilenameXml = CommunConfig.getInstance().productFile;
@@ -29,8 +30,13 @@ namespace Manina.Windows.Forms.NodeView
                   }
                   if (tmpNode.Name == "promotions")
                   {
-                     listPromotion = tmpNode;   
-                  }                     
+                      listPromotion = tmpNode;
+                  }
+
+                  if (tmpNode.Name == "forfaits")
+                  {
+                      listForfaits = tmpNode;
+                  }
                 }
             }
             catch (Exception e)
@@ -42,6 +48,21 @@ namespace Manina.Windows.Forms.NodeView
         public int NbProduct()
         {
             return listProduct.ChildNodes.Count;
+        }
+
+        public int NbPromotion()
+        {
+            return listPromotion.ChildNodes.Count;
+        }
+
+        public int NbForfaits()
+        {
+            return listForfaits.ChildNodes.Count;
+        }
+
+        public XmlNode getForfait(int n)
+        {
+            return listForfaits.ChildNodes[n];
         }
 
         public XmlNode getProduct(int n)
