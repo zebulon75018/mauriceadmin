@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maurice", "Maurice\Maurice.csproj", "{B9889782-F010-45F7-A937-D2A352D3958D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageListView", "ImageListView\ImageListView.csproj", "{0C295FB8-C6C6-4A40-9F19-05A43F353A04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SheelLib", "SheelLib\SheelLib.csproj", "{BDCD0ED8-E791-47F1-8AEE-1CBAEE7AE97F}"
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug Designer|Any CPU = Debug Designer|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		DesignerDebug|Any CPU = DesignerDebug|Any CPU
+		Release without WIC|Any CPU = Release without WIC|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B9889782-F010-45F7-A937-D2A352D3958D}.Debug Designer|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9889782-F010-45F7-A937-D2A352D3958D}.Debug Designer|Any CPU.Build.0 = Debug|Any CPU
+		{B9889782-F010-45F7-A937-D2A352D3958D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9889782-F010-45F7-A937-D2A352D3958D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9889782-F010-45F7-A937-D2A352D3958D}.DesignerDebug|Any CPU.ActiveCfg = DesignerDebug|Any CPU
+		{B9889782-F010-45F7-A937-D2A352D3958D}.DesignerDebug|Any CPU.Build.0 = DesignerDebug|Any CPU
+		{B9889782-F010-45F7-A937-D2A352D3958D}.Release without WIC|Any CPU.ActiveCfg = Release|Any CPU
+		{B9889782-F010-45F7-A937-D2A352D3958D}.Release without WIC|Any CPU.Build.0 = Release|Any CPU
+		{B9889782-F010-45F7-A937-D2A352D3958D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9889782-F010-45F7-A937-D2A352D3958D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C295FB8-C6C6-4A40-9F19-05A43F353A04}.Debug Designer|Any CPU.ActiveCfg = Debug Designer|Any CPU
+		{0C295FB8-C6C6-4A40-9F19-05A43F353A04}.Debug Designer|Any CPU.Build.0 = Debug Designer|Any CPU
+		{0C295FB8-C6C6-4A40-9F19-05A43F353A04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C295FB8-C6C6-4A40-9F19-05A43F353A04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C295FB8-C6C6-4A40-9F19-05A43F353A04}.DesignerDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C295FB8-C6C6-4A40-9F19-05A43F353A04}.DesignerDebug|Any CPU.Build.0 = Debug|Any CPU
+		{0C295FB8-C6C6-4A40-9F19-05A43F353A04}.Release without WIC|Any CPU.ActiveCfg = Release without WIC|Any CPU
+		{0C295FB8-C6C6-4A40-9F19-05A43F353A04}.Release without WIC|Any CPU.Build.0 = Release without WIC|Any CPU
+		{0C295FB8-C6C6-4A40-9F19-05A43F353A04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C295FB8-C6C6-4A40-9F19-05A43F353A04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDCD0ED8-E791-47F1-8AEE-1CBAEE7AE97F}.Debug Designer|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDCD0ED8-E791-47F1-8AEE-1CBAEE7AE97F}.Debug Designer|Any CPU.Build.0 = Debug|Any CPU
+		{BDCD0ED8-E791-47F1-8AEE-1CBAEE7AE97F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDCD0ED8-E791-47F1-8AEE-1CBAEE7AE97F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDCD0ED8-E791-47F1-8AEE-1CBAEE7AE97F}.DesignerDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDCD0ED8-E791-47F1-8AEE-1CBAEE7AE97F}.DesignerDebug|Any CPU.Build.0 = Debug|Any CPU
+		{BDCD0ED8-E791-47F1-8AEE-1CBAEE7AE97F}.Release without WIC|Any CPU.ActiveCfg = Release|Any CPU
+		{BDCD0ED8-E791-47F1-8AEE-1CBAEE7AE97F}.Release without WIC|Any CPU.Build.0 = Release|Any CPU
+		{BDCD0ED8-E791-47F1-8AEE-1CBAEE7AE97F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDCD0ED8-E791-47F1-8AEE-1CBAEE7AE97F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

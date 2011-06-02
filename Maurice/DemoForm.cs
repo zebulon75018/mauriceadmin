@@ -82,12 +82,15 @@ namespace Manina.Windows.Forms
         {            
             try
             {
-                LicenceControler lc = new LicenceControler();
+                // LicenceController n'était pas présent dans le projet (tu as peut être oublié de l'inclure dans l'import initial du projet ?)
+                // bref, du coup j'ai retiré la référence à la classe dans le projet
+                // et forcément, ben faut que je mette en commentaire cette partie...
+                /*LicenceControler lc = new LicenceControler();
 
                 if (lc.licenceOk == false)
                 {
                     Environment.Exit(1); 
-                }
+                }*/
 
                 VersionChecker vc = new VersionChecker();
                 string netresult = vc.GetNetworkVersion();

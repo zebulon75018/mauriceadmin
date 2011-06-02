@@ -49,16 +49,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AngleAltitudeControls">
-      <HintPath>..\..\..\..\..\..\..\dev\CSharp\AngleAltitudeControls\AngleAltitudeControls.dll</HintPath>
+      <HintPath>libs\AngleAltitudeControls.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus">
+      <HintPath>libs\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="Google.GData.Client">
-      <HintPath>..\..\google-gdata\clients\cs\samples\spreadsheets\bin\Debug\Google.GData.Client.dll</HintPath>
+      <HintPath>libs\Google.GData.Client.dll</HintPath>
     </Reference>
     <Reference Include="Google.GData.Extensions">
-      <HintPath>..\..\google-gdata\clients\cs\samples\spreadsheets\bin\Debug\Google.GData.Extensions.dll</HintPath>
+      <HintPath>libs\Google.GData.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Google.GData.Spreadsheets">
-      <HintPath>..\..\google-gdata\clients\cs\samples\spreadsheets\bin\Debug\Google.GData.Spreadsheets.dll</HintPath>
+      <HintPath>libs\Google.GData.Spreadsheets.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -77,7 +80,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="WizardBase">
-      <HintPath>..\..\..\..\..\..\..\dev\CSharp\Wizard\WizardDemo2\WizardDemo\WizardDemo\bin\Debug\WizardBase.dll</HintPath>
+      <HintPath>libs\WizardBase.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +97,8 @@
     </Compile>
     <Compile Include="DirUtil.cs" />
     <Compile Include="ExportExcel\ExcelExporter.cs" />
+    <Compile Include="ExportExcel\OrderedItem.cs" />
+    <Compile Include="ExportExcel\XMLTools.cs" />
     <Compile Include="FAddChildCategory.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -127,7 +132,6 @@
     <Compile Include="network\DownloadDialog.designer.cs">
       <DependentUpon>DownloadDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="network\LicenceControler.cs" />
     <Compile Include="network\LicenceQuery.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -233,10 +237,6 @@
     <None Include="Resources\Add.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ExcelExample\EPPlus-69409\trunk\ExcelPackage\EPPlus.csproj">
-      <Project>{7B288026-5502-4A39-BF41-77E086F3E4A3}</Project>
-      <Name>EPPlus</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ImageListView\ImageListView.csproj">
       <Project>{0C295FB8-C6C6-4A40-9F19-05A43F353A04}</Project>
       <Name>Maurce</Name>

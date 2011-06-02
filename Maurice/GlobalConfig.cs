@@ -28,7 +28,23 @@ namespace Manina.Windows.Forms
         {
             get
             {
-                return doc.LastChild.Attributes["communConfig"] .Value;
+                try
+                {
+                    XmlAttribute attr = doc.LastChild.Attributes["communConfig"];
+
+                    if (attr != null)
+                    {
+                        return attr.Value;
+                    }
+                    else
+                    {
+                        return String.Empty;
+                    }
+                }
+                catch (Exception)
+                {
+                    return String.Empty;
+                }
             }
         }
 

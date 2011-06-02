@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using Manina.Windows.Forms.ExportExcel;
 
 namespace Manina.Windows.Forms
 {
@@ -20,6 +21,16 @@ namespace Manina.Windows.Forms
             doc.Load("configuration.txt");
         }
 
+        public Int32 PrixFichierNumerique()
+        {
+            Int32 prix = XMLTools.GetAttributeIntValue(doc.FirstChild, "prixFichierCD");
+
+            if (prix == 0)
+                return 420;
+            else
+                return prix;
+        }
+
         public double PriceCD()
         {
             return double.Parse(doc.FirstChild.Attributes["CD"].Value);
@@ -32,7 +43,7 @@ namespace Manina.Windows.Forms
         {            
             format = "F"+format;
             return double.Parse(doc.FirstChild.Attributes[format].Value);
-        }
+        } 
 
         public double PriceDollar(string format)
         {
