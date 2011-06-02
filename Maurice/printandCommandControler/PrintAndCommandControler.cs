@@ -39,7 +39,7 @@ namespace Manina.Windows.Forms.printandCommandControler
                     data.Add(user.FormatPhoto(n));
                  //   data.Add(user.orderCD.ToString());
                  //   data.Add(user.chamberNumber);
-                    Insert(1, data);
+                 //   Insert(1, data);
                 }
             }
             catch (Exception e)

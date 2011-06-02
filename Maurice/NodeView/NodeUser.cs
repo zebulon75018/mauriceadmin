@@ -10,6 +10,8 @@ namespace Manina.Windows.Forms.NodeView
 {
     public class NodeUser : NodesBase
     {
+        private XmlNode photoList;
+
         public string chamberNumber="";       
         public NodeUser(string filename)
         {
@@ -93,6 +95,26 @@ namespace Manina.Windows.Forms.NodeView
             }
         }
 
+        public XmlNode GetPhoto(int n)
+        {
+            XmlNode node = null;
+
+            int i = 0;
+            foreach (XmlNode elm in root.ChildNodes)
+            {
+                if (elm.Name == "img")
+                {
+                    if (i == n)
+                    {
+                        node = elm;
+                        break;
+                    }
+                }
+            }
+
+            return node;
+        }
+
         public int NbPhoto()
         {
             int result = 0;
@@ -111,7 +133,16 @@ namespace Manina.Windows.Forms.NodeView
             {
                 if (elm.Name == "img")
                 {
-                    if (i == n) return elm.Attributes["format"].Value.ToString();
+                    try
+                    {
+                        if (i == n) return elm.Attributes["format"].Value.ToString();
+                    }
+                    catch (Exception)
+                    {
+                        return String.Empty;
+                    }
+
+                    
                     i++;
                 }
             }
