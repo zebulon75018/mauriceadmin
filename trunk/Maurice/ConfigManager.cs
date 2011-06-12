@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using Manina.Windows.Forms.ExportExcel;
+using System.Windows.Forms;
 
 namespace Manina.Windows.Forms
 {
@@ -17,8 +18,15 @@ namespace Manina.Windows.Forms
 
         public ConfigManager()
         {
-            doc = new XmlDocument();
-            doc.Load("configuration.txt");
+            try
+            {
+                doc = new XmlDocument();
+                doc.Load("configuration.txt");
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error Loading configuration.txt " + e.Message);
+            }
         }
 
         public Int32 PrixFichierNumerique()

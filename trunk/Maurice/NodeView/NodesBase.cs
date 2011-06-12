@@ -104,6 +104,19 @@ namespace Manina.Windows.Forms.NodeView
             }
         }
 
+        protected int getIntAttribut(XmlNode n, string attr)
+        {
+            int returnValue = 0;
+            if (IsAttributExist(ref n, attr) == false) return returnValue;
+            String val = n.Attributes[attr].Value.ToString();
+
+            if (!String.IsNullOrEmpty(val))
+            {
+                Int32.TryParse(val, out returnValue);
+            }
+            return returnValue;
+        }
+
         protected bool getBooleanAttribut( XmlNode n, string attr)
         {
             if (IsAttributExist(ref n,attr) == false) return false;            

@@ -124,6 +124,7 @@
       <DependentUpon>FFindCustomerByDate.cs</DependentUpon>
     </Compile>
     <Compile Include="FilenamePhotoProvider.cs" />
+    <Compile Include="FormatGoodiesPicture.cs" />
     <Compile Include="GlobalConfig.cs" />
     <Compile Include="keyboardSimulator\KeyboardSimulator.cs" />
     <Compile Include="network\DownloadDialog.cs">
@@ -131,12 +132,6 @@
     </Compile>
     <Compile Include="network\DownloadDialog.designer.cs">
       <DependentUpon>DownloadDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="network\LicenceQuery.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="network\LicenceQuery.designer.cs">
-      <DependentUpon>LicenceQuery.cs</DependentUpon>
     </Compile>
     <Compile Include="network\VersionChecker.cs" />
     <Compile Include="NodeView\NodeCategory.cs" />
@@ -169,6 +164,18 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="thumbnail\ThumbnailMaker.cs" />
+    <Compile Include="VerySimpleInputDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VerySimpleInputDialog.designer.cs">
+      <DependentUpon>VerySimpleInputDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VeryVerySimpleInputDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VeryVerySimpleInputDialog.designer.cs">
+      <DependentUpon>VeryVerySimpleInputDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="wizard\FWizardImport.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -194,9 +201,6 @@
     <EmbeddedResource Include="network\DownloadDialog.resx">
       <DependentUpon>DownloadDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="network\LicenceQuery.resx">
-      <DependentUpon>LicenceQuery.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="PhotoPromotionEntry.resx">
       <DependentUpon>PhotoPromotionEntry.cs</DependentUpon>
     </EmbeddedResource>
@@ -213,6 +217,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="VerySimpleInputDialog.resx">
+      <DependentUpon>VerySimpleInputDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VeryVerySimpleInputDialog.resx">
+      <DependentUpon>VeryVerySimpleInputDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="wizard\FWizardImport.resx">
       <DependentUpon>FWizardImport.cs</DependentUpon>
     </EmbeddedResource>

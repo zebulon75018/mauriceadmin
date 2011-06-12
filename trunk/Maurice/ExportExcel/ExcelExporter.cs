@@ -97,11 +97,12 @@ namespace Manina.Windows.Forms.ExportExcel
                         listForfaitsDivers.Add(item);
                     }
 
-                    Int32 TotalPhotoCD = 0;
+                    Int32 TotalPhotoCD = 0;                    
                     Int32 TotalPhotoTirage = 0;
 
                     List<OrderedItem> listFormatPhotos = new List<OrderedItem>();
                     List<OrderedItem> listMerchandising = new List<OrderedItem>();
+                    List<OrderedItem> listImageOnBook = new List<OrderedItem>();
 
                     for (int i = 0; i < price.NbProduct(); i++)
                     {
@@ -174,15 +175,22 @@ namespace Manina.Windows.Forms.ExportExcel
                     // avant de finir, on reparcours encore la commande utilisateur pour calculer le nombre d'images commandées sur CD (minimum 10 normalement, mais ça c'est censé etre checké en amont)
                     for (int j = 0; j < user.NbPhoto(); j++)
                     {
-                        XmlNode img = user.GetPhoto(j);
                         // On en profite également pour regarder si la photo a été commandée sur CD
-                        // Dans ce cas, on incrément le compteur. cela nous permettra de calculer le prix de revient du CD
-                        String strImageOnCD = XMLTools.GetAttributeStringValue(img, "imageoncd");
-
-                        if (strImageOnCD.ToLower() == "true")
+                        // Dans ce cas, on incrément le compteur. cela nous permettra de calculer le prix de revient du CD                        
+                        if (user.isPhotoOnCD(j))
                         {
                             TotalPhotoCD++;
                         }
+                                                
+                    }
+
+                    // avant de finir, on reparcours encore la commande utilisateur pour calculer le nombre d'images commandées sur CD (minimum 10 normalement, mais ça c'est censé etre checké en amont)
+                    for (int j = 0; j < user.NbPhoto(); j++)
+                    {
+                        XmlNode img = user.GetPhoto(j);
+                        // On en profite également pour regarder si la photo a été commandée sur CD
+                        // Dans ce cas, on incrément le compteur. cela nous permettra de calculer le prix de revient du CD
+                       
                     }
 
 
@@ -224,7 +232,24 @@ namespace Manina.Windows.Forms.ExportExcel
 
                     // Formules photos
                     List<OrderedItem> listFormulesPhotos = new List<OrderedItem>();
-                    listFormulesPhotos.Add(new OrderedItem() { Name = "Fichiers numériques sur CD", Quantity = TotalPhotoCD, UnitPrice = cm.PrixFichierNumerique() });
+
+                    if (user.withoutprinting )
+                    {
+                        if (user.NbPhoto() == 12)
+                        {
+                            listFormulesPhotos.Add(new OrderedItem() { Name = "Forfait 50 Images sur CD", Quantity = 1, UnitPrice = price.getforfait50CD() });                            
+                        }
+                        else
+                        {
+                            listFormulesPhotos.Add(new OrderedItem() { Name = "Forfait 100 Images sur CD", Quantity = 1, UnitPrice = price.getforfait100CD() });
+                            
+                        }
+                    }
+                    else
+                    {
+                        listFormulesPhotos.Add(new OrderedItem() { Name = "Fichiers numériques sur CD", Quantity = TotalPhotoCD, UnitPrice = price.PrixFichierNumerique() });
+                    }
+                    
                     
                     createCategoryRows(ref ws, ++row, listFormulesPhotos);
                     row += listFormulesPhotos.Count - 1;
@@ -235,10 +260,23 @@ namespace Manina.Windows.Forms.ExportExcel
                     row += listMerchandising.Count - 1;
                     createInterCategoryRow(ref ws, ++row);
 
+                    // Nombre de page sur le livre.
+                    // 20 pages a 300 euros soit 12000 Mur
+                    // 500 mur la page supplémentaire , fonctionnant par 2 pages 
+
+                    if (user.orderBook == true)
+                    {
+                        int nbPageOnBook = user.getNbPageOnBook;
+                        int nbPageSupplementaire = nbPageOnBook -20;
+                        row += createPhotoOnBook(ref ws, ++row, nbPageSupplementaire, price.getPrixFortaitBookPrestige(), price.getprixPageBookMore());
+
+                        createInterCategoryRow(ref ws, ++row);
+                        
+                    }
+                                        
                     // forfaits divers
                     createCategoryRows(ref ws, ++row, listForfaitsDivers, false);
                     row += listForfaitsDivers.Count - 1;		
-
 
                     // FINALLY
                     // LE GRAND TOTAL
@@ -357,6 +395,45 @@ namespace Manina.Windows.Forms.ExportExcel
 
                 row++;
             }
+        }
+
+        private int createPhotoOnBook(ref ExcelWorksheet ws, Int32 row,Int32 quantityMore,Int32 priceForfait,Int32 pricePageBookMore)
+        {
+            // LE nombre de row ajouté.
+            int returnvalue = 1;
+            ExcelRange cellLibelle = ws.Cells["A" + row];
+            ExcelRange cellQuantity = ws.Cells["C" + row];
+            //ExcelRange cellPrice = ws.Cells["D" + row];
+            ExcelRange cellTotal = ws.Cells["E" + row];
+
+            cellLibelle.Value = "Livre Prestige";
+            cellQuantity.Value = 1 ;
+            //cellPrice.Value = priceUnity;
+            cellTotal.Value =(Double ) priceForfait ;
+
+            setCellBoxed(ref cellQuantity);            
+            setCellPriceMiddle(ref cellTotal);
+          
+             row++;
+             returnvalue++;
+
+             ExcelRange cellLibelle2 = ws.Cells["A" + row];
+             ExcelRange cellQuantity2 = ws.Cells["C" + row];
+             ExcelRange cellPrice2 = ws.Cells["D" + row];
+             ExcelRange cellTotal2 = ws.Cells["E" + row];
+
+             cellLibelle2.Value = "Pages supplémentaires";
+             cellQuantity2.Value = quantityMore ;
+             setCellBoxed(ref cellQuantity2);
+             cellPrice2.Value = ((Double)pricePageBookMore);
+             cellTotal2.Value = (Double)( quantityMore * pricePageBookMore);
+
+             setCellPriceMiddle(ref cellPrice2);
+
+             row++;
+             returnvalue++;                                   
+            return returnvalue;
+            
         }
 
         private void createSubTotalRow(ref ExcelWorksheet ws, Int32 row)

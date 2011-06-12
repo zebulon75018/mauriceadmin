@@ -7,6 +7,7 @@ using System.Drawing.Drawing2D;
 using System.Reflection;
 using System.IO;
 using System.Net;
+using System.Net;
 using Manina.Windows.Forms.NodeView;
 using ShellLib;
 using WizardBase;
@@ -17,7 +18,8 @@ using System.Diagnostics;
 using System.Threading;
 using Manina.Windows.Forms.KeyboardSimulator;
 using Manina.Windows.Forms.ExportExcel;
-// TRansaction 42015399 Net ReactorPayPal [Instant] Verified account, Transaction id:6J083905NV8068234
+
+
 namespace Manina.Windows.Forms
 {
     public partial class DemoForm : Form
@@ -33,6 +35,13 @@ namespace Manina.Windows.Forms
         private static NodePrice nodePrice = null;
 
         protected ImageListView currentImageListView;
+
+        enum SHOWPICTURE
+        {
+            ALL,
+            ONCD,
+            ONBOOK
+        }
         #endregion
 
         #region Renderer and color combobox items
@@ -85,18 +94,19 @@ namespace Manina.Windows.Forms
                 // LicenceController n'était pas présent dans le projet (tu as peut être oublié de l'inclure dans l'import initial du projet ?)
                 // bref, du coup j'ai retiré la référence à la classe dans le projet
                 // et forcément, ben faut que je mette en commentaire cette partie...
-                /*LicenceControler lc = new LicenceControler();
+              /*  LicenceControler lc = new LicenceControler();
 
                 if (lc.licenceOk == false)
                 {
                     Environment.Exit(1); 
-                }*/
+                }
+               */
 
                 VersionChecker vc = new VersionChecker();
                 string netresult = vc.GetNetworkVersion();
 
                 int versionMajor = 0;
-                int versionMineur = 5;
+                int versionMineur = 9;
                 char[] separator = new char[1];
                 separator[0] = '.';
                 string[] splitString = netresult.Split(separator);
@@ -174,6 +184,12 @@ namespace Manina.Windows.Forms
              */
             fillTree();
             showCustomerLeavingTomorrow();
+
+            if (GlobalConfig.getInstance() != null)
+            {
+                this.Text = "PHotos Maurice" +  GlobalConfig.getInstance().communConfig;
+            }
+             
         }
 
         #endregion
@@ -364,24 +380,40 @@ namespace Manina.Windows.Forms
 
         private void imageListView2_SelectionChanged(object sender, EventArgs e)
         {
-            ImageListViewItem sel = null;
-            if (((ImageListView)sender).SelectedItems.Count > 0)
-                sel = ((ImageListView)sender).SelectedItems[0];
-
-            try 
-            {
-            NodeUser nu = (NodeUser) treeView1.SelectedNode;
-            if (nu != null)
-            {
-                this.labelFormatImage.Text =  nu.getFormatImage(sel.FileName);
-            }
             
-            } catch(Exception exp)
-            {
-                this.labelFormatImage.Text = "";
-            }
+             ImageListViewItem sel = null;
+             if (((ImageListView)sender).SelectedItems.Count == 1)
+             {
+                 sel = ((ImageListView)sender).SelectedItems[0];
+                 propertyGrid1.Enabled = true;
+                 try
+                 {
+                     NodeUser nu = (NodeUser)treeView1.SelectedNode;
+                     if (nu != null)
+                     {
 
-            propertyGrid1.SelectedObject = sel;
+                         this.labelFormatImage.Text = nu.getFormatImage(sel.FileName);
+                         if (sel.FileName != null && sel.FileName.Length > 0)
+                         {
+                             this.Cursor = Cursors.WaitCursor;
+                             FormatGoodiesPicture test = new FormatGoodiesPicture(nu.getXmlImage(sel.FileName), nu);
+                             propertyGrid1.SelectedObject = test;
+                             this.Cursor = Cursors.Arrow;
+                         }
+                     }
+
+                 }
+                 catch (Exception exp)
+                 {
+                     this.labelFormatImage.Text = "";
+                 }
+             }
+             else
+             {
+                 propertyGrid1.Enabled = false;
+             }
+           
+            //propertyGrid1.SelectedObject = sel;
         }
         #endregion
 
@@ -431,14 +463,31 @@ namespace Manina.Windows.Forms
             imageListView1.ResumeLayout();
         }
 
-        private void PopulateListViewCustomer()
+        private void PopulateListViewCustomer(SHOWPICTURE showType)
         {
             imageListView2.Items.Clear();
             imageListView2.SuspendLayout();
-            NodeUser nu = (NodeUser) treeView1.SelectedNode;
+            NodeUser nu = (NodeUser) treeView1.SelectedNode;            
             for (int n = 0; n < nu.NbPhoto(); n++)
             {
-                imageListView2.Items.Add(nu.FullFilenamePhoto(n));
+                switch (showType)
+                {
+                    case SHOWPICTURE.ALL:
+                        imageListView2.Items.Add(nu.FullFilenamePhoto(n));
+                        break;
+                    case SHOWPICTURE.ONCD:
+                        if (nu.isPhotoOnCD(n))
+                        {
+                            imageListView2.Items.Add(nu.FullFilenamePhoto(n));
+                        }
+                        break;
+                    case SHOWPICTURE.ONBOOK:
+                        if (nu.isPhotoOnBook(n))
+                        {
+                            imageListView2.Items.Add(nu.FullFilenamePhoto(n));
+                        }
+                        break;
+                }
             }
             /*
             foreach (FileInfo p in path.GetFiles("*.*"))
@@ -505,7 +554,8 @@ namespace Manina.Windows.Forms
                 buttonCash.Visible = true;
                 tabControl1.SelectedIndex = 2;
                 NodeUser node = (NodeUser)e.Node;
-                PopulateListViewCustomer();
+                node.refresh();
+                PopulateListViewCustomer(SHOWPICTURE.ALL);
                 FillGuiCustomer(node);
                 currentImageListView = imageListView2;
                 toolStrip1.Visible = true;
@@ -544,9 +594,21 @@ namespace Manina.Windows.Forms
 
             if (e.Node.GetType().Name == "NodePrice")
             {
-                NodePrice node = (NodePrice)e.Node;
-                FillGuiPrice(node);
-                tabControl1.SelectedIndex = 9;
+
+                VerySimpleInputDialog login = new VerySimpleInputDialog("Please Enter Password");
+                if (login.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    if (login.UserInput == "maurice")
+                    {
+                        NodePrice node = (NodePrice)e.Node;
+                        FillGuiPrice(node);
+                        tabControl1.SelectedIndex = 9;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Bad Password");
+                    }
+                }
             }
 
 
@@ -577,15 +639,7 @@ namespace Manina.Windows.Forms
             else
             {
                 buttonPrint.Visible = false;
-            }
-            if (n.orderCD)
-            {
-              this.checkBoxCustomerOrderCD.CheckState = CheckState.Checked;
-            }
-            else
-            {
-                this.checkBoxCustomerOrderCD.CheckState = CheckState.Unchecked;
-            }
+            }          
         }
 
         private void FillGuiCategory(NodeCategory n)
@@ -627,6 +681,8 @@ namespace Manina.Windows.Forms
             panelColorEnd.BackColor = n.colorEnd;
             panelColorStart.BackColor = n.colorStart;
             angleSelector1.Angle = n.Angle;
+
+            checkBoxRotateImage.Visible = false;
             if (n.RotateImage == "true")
             {
                 checkBoxRotateImage.Checked = true;
@@ -674,12 +730,34 @@ namespace Manina.Windows.Forms
 
         private  void fillTree()
         {
-            nodeCategory = new NodesCategory();
+            try
+            {
+                nodeCategory = new NodesCategory();
+            }
+            catch (Exception e) { MessageBox.Show("Error Category " + e.Message); }
+
+        try {
             nodeCustomer = new NodesUser();
+        } catch(Exception e1) { MessageBox.Show("Error User " + e1.Message); } 
+                try 
+                {
             nodephotographer = new NodesPhotographer();
+                }catch(Exception e2) { MessageBox.Show("Error PhotoGrapher " + e2.Message); } 
+                try 
+                {
             nodeInfo = new NodesInfo();
+                }catch(Exception e3) { MessageBox.Show("Error Info " + e3.Message); } 
+                try 
+                {
             nodeConfig = new NodeConfig();
+                } 
+                    catch(Exception e4) { MessageBox.Show("Error Config " + e4.Message); } 
+                try 
+                {
             nodePrice = new NodePrice();
+                } 
+                        catch(Exception e5) { MessageBox.Show("Error Config " + e5.Message); }
+
             treeView1.Nodes.Add(nodeConfig);
             treeView1.Nodes.Add(nodeCategory);
             treeView1.Nodes.Add(nodeCustomer);
@@ -779,6 +857,9 @@ namespace Manina.Windows.Forms
                 return;
             }
             nodeInfo.AddInfo(textBoxInfo.Text);
+            MessageBox.Show("You have add " + textBoxInfo.Text);
+            textBoxInfo.Text = "";
+            nodeInfo.Save();
         }
 
         private void buttonDeleteInfo_Click(object sender, EventArgs e)
@@ -848,7 +929,10 @@ namespace Manina.Windows.Forms
                 MessageBox.Show("Name is Empty, please Fill ");
                 return;
             }
-            nodephotographer.AddPhotographe(textBoxNamePhotographer.Text);
+            nodephotographer.AddPhotographe(textBoxNamePhotographer.Text);            
+            MessageBox.Show("You have add " + textBoxNamePhotographer.Text);
+            textBoxNamePhotographer.Text = "";
+            nodephotographer.Save();
         }
 
         private void buttonChoosePicture_Click(object sender, EventArgs e)
@@ -1046,12 +1130,16 @@ namespace Manina.Windows.Forms
                 {
                     NodeCategory n = (NodeCategory)treeView1.SelectedNode;
                     n.Bitmap = textBoxPictureCategory.Text;
+                    if (textBoxPictureCategory.Text == null || textBoxPictureCategory.Text.Length == 0) return;                    
                     FileInfo fi = new FileInfo(textBoxPictureCategory.Text);
                     if (fi.Exists)
                     {
-                        pictureBoxCategoryPicture.Visible = true;
-                        pictureBoxCategoryPicture.SizeMode = PictureBoxSizeMode.StretchImage;
-                        pictureBoxCategoryPicture.Load(textBoxPictureCategory.Text);
+                        if (fi.Extension.ToLower() != ".gif")
+                        {
+                            pictureBoxCategoryPicture.Visible = true;
+                            pictureBoxCategoryPicture.SizeMode = PictureBoxSizeMode.StretchImage;
+                            pictureBoxCategoryPicture.Load(textBoxPictureCategory.Text);
+                        }
                     }
                     else
                     {
@@ -1147,17 +1235,28 @@ namespace Manina.Windows.Forms
                 NodeInfo n = (NodeInfo)treeView1.SelectedNode;
                 n.Bitmap = textBoxPictureInfo.Text;
 
-                FileInfo fi = new FileInfo(textBoxPictureInfo.Text);
-                if (fi.Exists)
+                if (textBoxPictureInfo.Text.Length == 0) return;
+
+                try
                 {
-                    pictureBoxInformation.Visible = true;
-                    pictureBoxInformation.SizeMode = PictureBoxSizeMode.StretchImage;
-                    pictureBoxInformation.Load(textBoxPictureInfo.Text);
+                    FileInfo fi = new FileInfo(textBoxPictureInfo.Text);
+                    if (fi.Exists)
+                    {
+                        if (fi.Extension.ToLower() != ".gif")
+                        {
+                            pictureBoxInformation.Visible = true;
+                            pictureBoxInformation.SizeMode = PictureBoxSizeMode.StretchImage;
+                            pictureBoxInformation.Load(textBoxPictureInfo.Text);
+                        }
+                    }
+                    else
+                    {
+                        pictureBoxInformation.Visible = false;
+                    }
                 }
-                else
+                catch (Exception exp)
                 {
-                    pictureBoxInformation.Visible = false;
-                }                
+                }
             }
         }
 
@@ -1261,7 +1360,7 @@ namespace Manina.Windows.Forms
 
         private void buttonPrint_Click_1(object sender, EventArgs e)
         {
-            string appPath = @"C:\Program Files (x86)\IrfanView\";
+             string appPath = @"C:\Program Files (x86)\IrfanView\";
             Process myProcess = new Process();
             try
             {
@@ -1282,9 +1381,9 @@ namespace Manina.Windows.Forms
 
                 KeyboardSimulator.KeyboardSimulator.SimulateStandardShortcut(KeyboardSimulator.StandardShortcut.Print);
 
-                //TODO FIND THE FORMAT OF THE IMAGE.....
-                string format = ((NodeUser)treeView1.SelectedNode).getFormatImage(selected[0].FileName);
-                printandCommandControler.PrintAndCommandControler.PrintLogger(selected[0].FileName, format);
+                //TODO FIND THE FORMAT OF THE IMAGE.....                
+                //string format = ((NodeUser)treeView1.SelectedNode).getFormatImage(selected[0].FileName);
+                printandCommandControler.PrintAndCommandControler.PrintLogger(selected[0].FileName);
                 
             }
             catch (Exception ex)
@@ -1307,11 +1406,13 @@ namespace Manina.Windows.Forms
             ExcelExporter exe = new ExcelExporter();
             if (treeView1.SelectedNode.GetType().Name == "NodeUser")
             {
+                this.Cursor = Cursors.WaitCursor;
                 NodeUser nu = (NodeUser)treeView1.SelectedNode;
                 nu.FactureEdit = true;
                 nu.Save();
                 exe.ExcelCustomer((NodeUser)treeView1.SelectedNode,nodePrice);
                 printandCommandControler.PrintAndCommandControler.CommandLogger((NodeUser)treeView1.SelectedNode,nodePrice);
+                this.Cursor = Cursors.Arrow;
             }
 
         }
@@ -1360,14 +1461,23 @@ namespace Manina.Windows.Forms
         {
             if (treeView1.SelectedNode.GetType().Name == "NodeConfig")
             {
-                NodeConfig n = (NodeConfig)treeView1.SelectedNode;
-                n.ImageInfo = textBoxguiconfigInfo.Text;
-
-                FileInfo fi = new FileInfo(textBoxguiconfigInfo.Text);
-                if (fi.Exists)
+                try
                 {
-                    pictureBoxGuiInfo.SizeMode = PictureBoxSizeMode.StretchImage;
-                    pictureBoxGuiInfo.Load(textBoxguiconfigInfo.Text);                    
+                    NodeConfig n = (NodeConfig)treeView1.SelectedNode;
+                    n.ImageInfo = textBoxguiconfigInfo.Text;
+
+                    FileInfo fi = new FileInfo(textBoxguiconfigInfo.Text);
+                    if (fi.Exists)
+                    {
+                        if (fi.Extension.ToLower() != ".gif")
+                        {
+                            pictureBoxGuiInfo.SizeMode = PictureBoxSizeMode.StretchImage;
+                            pictureBoxGuiInfo.Load(textBoxguiconfigInfo.Text);
+                        }
+                    }
+                }
+                catch (Exception exp)
+                {
                 }
             }
         }
@@ -1392,14 +1502,23 @@ namespace Manina.Windows.Forms
         {
             if (treeView1.SelectedNode.GetType().Name == "NodeConfig")
             {
-                NodeConfig n = (NodeConfig)treeView1.SelectedNode;
-                n.ImagePhoto = textBoxguiconfigImagePhoto.Text;
-
-                FileInfo fi = new FileInfo(textBoxguiconfigImagePhoto.Text);
-                if (fi.Exists)
+                try
                 {
-                    pictureBoxguiconfigPhoto.SizeMode = PictureBoxSizeMode.StretchImage;
-                    pictureBoxguiconfigPhoto.Load(textBoxguiconfigImagePhoto.Text);
+                    NodeConfig n = (NodeConfig)treeView1.SelectedNode;
+                    n.ImagePhoto = textBoxguiconfigImagePhoto.Text;
+
+                    FileInfo fi = new FileInfo(textBoxguiconfigImagePhoto.Text);
+                    if (fi.Exists)
+                    {
+                        if (fi.Extension.ToLower() != ".gif")
+                        {
+                            pictureBoxguiconfigPhoto.SizeMode = PictureBoxSizeMode.StretchImage;
+                            pictureBoxguiconfigPhoto.Load(textBoxguiconfigImagePhoto.Text);
+                        }
+                    }
+                }
+                catch (Exception exp)
+                {
                 }
             }
         }
@@ -1408,14 +1527,23 @@ namespace Manina.Windows.Forms
         {
             if (treeView1.SelectedNode.GetType().Name == "NodeConfig")
             {
-                NodeConfig n = (NodeConfig)treeView1.SelectedNode;
-                n.ImageLangue = textBoxguiconfigLanguage.Text;
-
-                FileInfo fi = new FileInfo(textBoxguiconfigLanguage.Text);
-                if (fi.Exists)
+                try
                 {
-                    pictureBoxguiconfigLanguage.SizeMode = PictureBoxSizeMode.StretchImage;
-                    pictureBoxguiconfigLanguage.Load(textBoxguiconfigLanguage.Text);
+                    NodeConfig n = (NodeConfig)treeView1.SelectedNode;
+                    n.ImageLangue = textBoxguiconfigLanguage.Text;
+
+                    FileInfo fi = new FileInfo(textBoxguiconfigLanguage.Text);
+                    if (fi.Exists)
+                    {
+                        if (fi.Extension.ToLower() != ".gif")
+                        {
+                            pictureBoxguiconfigLanguage.SizeMode = PictureBoxSizeMode.StretchImage;
+                            pictureBoxguiconfigLanguage.Load(textBoxguiconfigLanguage.Text);
+                        }
+                    }
+                }
+                catch (Exception exp)
+                {
                 }
             }
         }
@@ -1478,23 +1606,26 @@ namespace Manina.Windows.Forms
 
             if (treeView1.SelectedNode.GetType().Name == "NodeUser")
             {
-                NodeUser nu = (NodeUser)treeView1.SelectedNode;
-                ImageListView.ImageListViewSelectedItemCollection selected = this.imageListView2.SelectedItems;
-                foreach (ImageListViewItem img in selected)
+                if (MessageBox.Show("Are you sure you want to delete ? ", "Are you sure you want to delete ? ", MessageBoxButtons.OKCancel) == System.Windows.Forms.DialogResult.OK)
                 {
-                    nu.DeleteImage(img.FileName);                    
+                    NodeUser nu = (NodeUser)treeView1.SelectedNode;
+                    ImageListView.ImageListViewSelectedItemCollection selected = this.imageListView2.SelectedItems;
+                    foreach (ImageListViewItem img in selected)
+                    {
+                        nu.DeleteImage(img.FileName);
+                    }
+                    nu.Save();
+                    DeleteFiles(imageListView2, false);
+                    PopulateListViewCustomer(SHOWPICTURE.ALL);
                 }
-                nu.Save();
-                DeleteFiles(imageListView2,false);
-                PopulateListViewCustomer();
             }
         }
 
         private void checkBoxCustomerOrderCD_CheckedChanged(object sender, EventArgs e)
         {
-            NodeUser nu = (NodeUser)treeView1.SelectedNode;
-            nu.orderCD = checkBoxCustomerOrderCD.Checked;
-            nu.Save();
+        //    NodeUser nu = (NodeUser)treeView1.SelectedNode;
+        //    nu.orderCD = checkBoxCustomerOrderCD.Checked;
+        //    nu.Save();
         }
 
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -1618,6 +1749,66 @@ namespace Manina.Windows.Forms
                 }
             }
 
+        }
+
+        private void labelPassword_DoubleClick(object sender, EventArgs e)
+        {
+            if (treeView1.SelectedNode != null)
+            {
+                NodeUser nu = (NodeUser)treeView1.SelectedNode;
+                VerySimpleInputDialog passChange = new VerySimpleInputDialog("Change the password");
+                passChange.UserInput= nu.Password.ToString();
+                if (passChange.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    try
+                    {
+                        //int newPass = int.Parse(passChange.UserInput);
+                        if (passChange.UserInput.Length > 0)
+                        {
+                            nu.Password = passChange.UserInput;
+                            labelPassword.Text = nu.Password;
+                        }
+                    }
+                    catch(Exception exp)
+                    {
+                        MessageBox.Show("Error " + exp.Message);
+                    }
+                }
+            }
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonUrlSearch_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (openFileDialogHtml.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                textBoxInfoUrl.Text = openFileDialogHtml.FileName;
+            }
+        }
+
+        private void buttonShowAllPicture_Click(object sender, EventArgs e)
+        {
+            PopulateListViewCustomer(SHOWPICTURE.ALL);
+        }
+
+        private void buttonShowCDPicture_Click(object sender, EventArgs e)
+        {
+            PopulateListViewCustomer(SHOWPICTURE.ONCD);
+        }
+
+        private void buttonBookPicture_Click(object sender, EventArgs e)
+        {
+            PopulateListViewCustomer(SHOWPICTURE.ONBOOK);
         }
        
         }           
