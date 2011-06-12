@@ -73,7 +73,7 @@ namespace Manina.Windows.Forms
         internal Image clonedThumbnail;
 
         internal ImageListView.ImageListViewItemCollection owner;
-        internal bool isDirty;
+        internal bool isDirty;  
         private bool editing;
         #endregion
 

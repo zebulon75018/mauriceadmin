@@ -81,5 +81,11 @@ namespace Manina.Windows.Forms.NodeView
             }
             return result;
         }
+
+        public void Save()
+        {
+        /// On ne sauvegarde pas par soucis de conflit avec le client
+        }
+
     }
 }

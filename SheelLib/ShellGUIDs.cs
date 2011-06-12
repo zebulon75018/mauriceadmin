@@ -13,5 +13,8 @@ namespace ShellLib
 			new Guid("{C0A651F5-B48B-11d2-B5ED-006097C686F6}");
 		public static Guid IID_IFolderFilter = 
 			new Guid("{9CC22886-DC8E-11d2-B1D0-00C04F8EEB3E}");
+
+        public static Guid IIDWizardPrint =
+            new Guid("{60FD46DE-F830-4894-A628-6fa81bc0190d}");
 	}
 }

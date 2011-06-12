@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Windows.Forms;
+using Manina.Windows.Forms.ExportExcel;
 
 namespace Manina.Windows.Forms.NodeView
 {
@@ -43,6 +44,40 @@ namespace Manina.Windows.Forms.NodeView
             {
                 MessageBox.Show("Error " + e.Message); 
             }
+        }
+        public int getprixPictureBook()
+        {
+            return XMLTools.GetAttributeIntValue(root, "prixPictureBook");
+        }
+
+        public int getforfait50CD()
+        {
+            return XMLTools.GetAttributeIntValue(root, "forfait50CD");
+        }
+
+        public int getforfait100CD()
+        {
+            return XMLTools.GetAttributeIntValue(root, "forfait100CD");
+        }
+
+        public int getPrixFortaitBookPrestige()
+        {
+            return XMLTools.GetAttributeIntValue(root, "prixPrestigeBook");
+        }
+
+        public int getprixPageBookMore()
+        {
+            return XMLTools.GetAttributeIntValue(root, "prixPrestigePageMore");
+        }
+
+        public Int32 PrixFichierNumerique()
+        {
+            Int32 prix = XMLTools.GetAttributeIntValue(doc.FirstChild, "prixFichierCD");
+
+            if (prix == 0)
+                return 80;
+            else
+                return prix;
         }
 
         public int NbProduct()

@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Xml;
 using System.Windows.Forms;
+using Manina.Windows.Forms.ExportExcel;
 
 namespace Manina.Windows.Forms.NodeView
 {
@@ -33,6 +34,20 @@ namespace Manina.Windows.Forms.NodeView
             }
         }
 
+        public void refresh()
+        {
+            doc = new XmlDocument();
+            try
+            {
+                doc.Load(FilenameXml);
+                root = doc.FirstChild;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error " + e.Message);
+            }
+        }
+
         public string getDirectory()
         {            
             return  DirUtil.JoinDirAndFile(NodesUser.path,chamberNumber);
@@ -52,6 +67,12 @@ namespace Manina.Windows.Forms.NodeView
         public string Password
         {
             get { return root.Attributes["pass"].Value; }
+            set {
+
+                refresh();
+                UpdateAttribut(ref root, "pass", value);
+                internalSave();
+            }
         }
 
         public DateTime LeavingDateTime        
@@ -62,7 +83,7 @@ namespace Manina.Windows.Forms.NodeView
                 char[] sep = new char[1];
                 sep[0]='-';
                 string [] strdate = date.Split(sep);
-                DateTime result = new DateTime(Int32.Parse(strdate[2]), Int32.Parse(strdate[1]), Int32.Parse(strdate[0]));
+                DateTime result     = new DateTime(Int32.Parse(strdate[2]), Int32.Parse(strdate[1]), Int32.Parse(strdate[0]));
                 return result;
             }
         }
@@ -79,9 +100,11 @@ namespace Manina.Windows.Forms.NodeView
             }
             set
             {
+                refresh();
                 setBooleanAttribut(ref root, "haspayed", value);
+                internalSave();
             }
-        }
+        }        
 
         public bool FactureEdit
         {
@@ -91,12 +114,14 @@ namespace Manina.Windows.Forms.NodeView
             }
             set
             {
+                refresh();
                 setBooleanAttribut(ref root, "factureEdit", value);
+                internalSave();
             }
         }
 
         public XmlNode GetPhoto(int n)
-        {
+        {            
             XmlNode node = null;
 
             int i = 0;
@@ -109,10 +134,41 @@ namespace Manina.Windows.Forms.NodeView
                         node = elm;
                         break;
                     }
+                    i++;
                 }
             }
 
             return node;
+        }
+
+        public bool isPhotoOnCD(int n)
+        {            
+         XmlNode img = GetPhoto(n);
+         String strImageOnCD = XMLTools.GetAttributeStringValue(img, "imageoncd");
+
+         if (strImageOnCD.ToLower() == "true")
+         {
+             return true;
+         }
+         else
+         {
+             return false;
+         }
+        }
+
+        public bool isPhotoOnBook(int n)
+        {
+            XmlNode img = GetPhoto(n);
+            String strImageOnBook = XMLTools.GetAttributeStringValue(img, "imageonbook");
+
+            if (strImageOnBook.ToLower() == "true")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public int NbPhoto()
@@ -203,6 +259,18 @@ namespace Manina.Windows.Forms.NodeView
             return "";
         }
 
+        public XmlNode getXmlImage(string filename)
+        {
+            foreach (XmlNode elm in root.ChildNodes)
+            {
+                if (elm.Name == "img" && elm.Attributes["path"].Value.ToString() == filename)
+                {
+                    return elm;
+                }
+            }
+            return null;
+        }
+
         public string getFormatImage(string filename)
         {            
             foreach (XmlElement elm in root.ChildNodes)
@@ -212,7 +280,15 @@ namespace Manina.Windows.Forms.NodeView
                     
                        if (elm.Attributes["path"].Value.ToString() == filename)
                        {
-                           return elm.Attributes["format"].Value.ToString();
+                           try
+                           {
+                               return elm.Attributes["format"].Value.ToString();
+                           }
+                           catch (Exception e)
+                           {
+                               return "";
+                           }
+
                        }                    
                 }
             }
@@ -221,6 +297,7 @@ namespace Manina.Windows.Forms.NodeView
 
         public void DeleteImage(string filename)
         {
+            refresh();
             XmlElement findImage = null;
             foreach (XmlElement elm in root.ChildNodes)
             {
@@ -234,6 +311,7 @@ namespace Manina.Windows.Forms.NodeView
                 }
             }
             root.RemoveChild(findImage);
+            internalSave();
         }
 
 
@@ -244,7 +322,39 @@ namespace Manina.Windows.Forms.NodeView
                 }
             set
             {
-                setBooleanAttribut(ref root, "ordercd", value);
+               // setBooleanAttribut(ref root, "ordercd", value);
+            }
+        }
+
+        public bool withoutprinting
+        {
+            get
+            {
+                return getBooleanAttribut(root, "withoutprinting");
+            }
+        }
+
+        public bool orderBook
+        {
+            get
+            {
+                return getBooleanAttribut(root, "orderbook");
+            }
+            set
+            {
+                // setBooleanAttribut(ref root, "ordercd", value);
+            }
+        }
+
+        public int getNbPageOnBook
+        {
+            get
+            {
+                return getIntAttribut(root, "nbpageonbook");
+            }
+            set
+            {
+                // setBooleanAttribut(ref root, "ordercd", value);
             }
         }
 
@@ -263,7 +373,7 @@ namespace Manina.Windows.Forms.NodeView
             }
             set
             {
-                UpdateAttribut(ref root, "name", value);
+              //  UpdateAttribut(ref root, "name", value);
             }
         }
         public String firstname
@@ -281,13 +391,28 @@ namespace Manina.Windows.Forms.NodeView
             }
             set
             {
-                UpdateAttribut(ref root, "firstname", value);
+                //UpdateAttribut(ref root, "firstname", value);
             }
         }
 
         public String directoryBackup()
         {
             return Text + "__" + (String)LeavingDate;
+        }
+
+        public void internalSave()
+        {
+            if (File.Exists(FilenameXml) == false)
+            {
+                MessageBox.Show("Warning " + FilenameXml + " doesn't exists ");
+                return;
+            }               
+            doc.Save(FilenameXml);
+        }
+
+        public void Save()
+        {
+            /// On ne sauvegarde pas par soucis de conflit avec le client
         }
     }
 }

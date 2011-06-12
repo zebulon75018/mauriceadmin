@@ -3,3 +3,18 @@ C:\Users\c\Documents\Visual Studio 2010\Projects\imagelistview\SheelLib\bin\Debu
 C:\Users\c\Documents\Visual Studio 2010\Projects\imagelistview\SheelLib\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\c\Documents\Visual Studio 2010\Projects\imagelistview\SheelLib\obj\Debug\SheelLib.dll
 C:\Users\c\Documents\Visual Studio 2010\Projects\imagelistview\SheelLib\obj\Debug\SheelLib.pdb
+C:\dev\codeGoogle\mauriceadmin\SheelLib\bin\Debug\SheelLib.dll
+C:\dev\codeGoogle\mauriceadmin\SheelLib\bin\Debug\SheelLib.pdb
+C:\dev\codeGoogle\mauriceadmin\SheelLib\obj\Debug\ResolveAssemblyReference.cache
+C:\dev\codeGoogle\mauriceadmin\SheelLib\obj\Debug\SheelLib.dll
+C:\dev\codeGoogle\mauriceadmin\SheelLib\obj\Debug\SheelLib.pdb
+F:\mauriceadmin\mauriceadmin\SheelLib\bin\Debug\SheelLib.dll
+F:\mauriceadmin\mauriceadmin\SheelLib\bin\Debug\SheelLib.pdb
+F:\mauriceadmin\mauriceadmin\SheelLib\obj\Debug\ResolveAssemblyReference.cache
+F:\mauriceadmin\mauriceadmin\SheelLib\obj\Debug\SheelLib.dll
+F:\mauriceadmin\mauriceadmin\SheelLib\obj\Debug\SheelLib.pdb
+C:\maurice\codegoogle\mauriceadmin\SheelLib\bin\Debug\SheelLib.dll
+C:\maurice\codegoogle\mauriceadmin\SheelLib\bin\Debug\SheelLib.pdb
+C:\maurice\codegoogle\mauriceadmin\SheelLib\obj\Debug\ResolveAssemblyReference.cache
+C:\maurice\codegoogle\mauriceadmin\SheelLib\obj\Debug\SheelLib.dll
+C:\maurice\codegoogle\mauriceadmin\SheelLib\obj\Debug\SheelLib.pdb
