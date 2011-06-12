@@ -21,6 +21,7 @@ namespace  Manina.Windows.Forms.NetWork
         {
             //Initialization
             HttpWebRequest WebReq = (HttpWebRequest)WebRequest.Create(string.Format("{0}{1}", "http://tcltk.free.fr/maurice/getversion.php", ""));
+          //  HttpWebRequest WebReq = (HttpWebRequest)WebRequest.Create(string.Format("{0}{1}", "http://127.0.0.1/getversion.php", ""));
             //This time, our method is GET.
             WebReq.Method = "GET";
             //From here on, it's all the same as above.
@@ -33,19 +34,14 @@ namespace  Manina.Windows.Forms.NetWork
             Stream Answer = WebResp.GetResponseStream();
             StreamReader _Answer = new StreamReader(Answer);
             netVersion = _Answer.ReadToEnd();
-
-            if (netVersion == "FAILED")
-            {
-            }
-            if (netVersion == "REBOOT")
-            {
-            }
+          
             return netVersion;
         }
 
          public void DownloadFile()
         {
             DownloadDialog dd = new DownloadDialog(netVersion, "http://tcltk.free.fr/maurice/getFile.php");
+            //DownloadDialog dd = new DownloadDialog(netVersion, "http://127.0.0.1/getFile.php");
             dd.ShowDownLoadDialog();
         }
        
