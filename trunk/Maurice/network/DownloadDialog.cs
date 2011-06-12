@@ -8,6 +8,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.Net;
 using System.IO;
+using System.Threading;
+using System.Diagnostics;
 
 namespace Manina.Windows.Forms.NetWork
 {
@@ -42,6 +44,10 @@ namespace Manina.Windows.Forms.NetWork
          // Specify a progress notification handler.
           client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgressCallback);
           FileInfo fi = new FileInfo(Application.ExecutablePath);
+          if (Directory.Exists(fi.DirectoryName + "\\install\\") == false)
+          {
+              Directory.CreateDirectory(fi.DirectoryName + "\\install\\");
+          }            
           client.DownloadFileAsync(uri, fi.DirectoryName + "\\install\\adminphoto_"+version+".exe");
         }
 
@@ -54,6 +60,12 @@ namespace Manina.Windows.Forms.NetWork
         private void DownloadFileCallback2(object sender, AsyncCompletedEventArgs e)
         {
             this.Close();
+            FileInfo fi = new FileInfo(Application.ExecutablePath);
+            Process p = new Process();
+            p.StartInfo.FileName = fi.DirectoryName + "\\install\\adminphoto_" + version + ".exe";
+            p.Start();
+            Thread.Sleep(5);
+            Application.Exit();
         }
     }
 }
