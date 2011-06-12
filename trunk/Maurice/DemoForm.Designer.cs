@@ -428,7 +428,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27.83171F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 72.16829F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 64F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 137F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 138F));
             this.tableLayoutPanel1.Controls.Add(this.textBoxSpanish, 1, 6);
             this.tableLayoutPanel1.Controls.Add(this.label7, 0, 6);
             this.tableLayoutPanel1.Controls.Add(this.textBoxItalian, 1, 5);
@@ -474,7 +474,7 @@
             this.textBoxSpanish.Location = new System.Drawing.Point(187, 265);
             this.textBoxSpanish.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxSpanish.Name = "textBoxSpanish";
-            this.textBoxSpanish.Size = new System.Drawing.Size(467, 22);
+            this.textBoxSpanish.Size = new System.Drawing.Size(466, 22);
             this.textBoxSpanish.TabIndex = 10;
             this.textBoxSpanish.TextChanged += new System.EventHandler(this.textBoxSpanish_TextChanged);
             // 
@@ -494,7 +494,7 @@
             this.textBoxItalian.Location = new System.Drawing.Point(187, 221);
             this.textBoxItalian.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxItalian.Name = "textBoxItalian";
-            this.textBoxItalian.Size = new System.Drawing.Size(467, 22);
+            this.textBoxItalian.Size = new System.Drawing.Size(466, 22);
             this.textBoxItalian.TabIndex = 7;
             this.textBoxItalian.TextChanged += new System.EventHandler(this.textBoxItalian_TextChanged);
             // 
@@ -514,7 +514,7 @@
             this.textBoxDeutch.Location = new System.Drawing.Point(187, 172);
             this.textBoxDeutch.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxDeutch.Name = "textBoxDeutch";
-            this.textBoxDeutch.Size = new System.Drawing.Size(467, 22);
+            this.textBoxDeutch.Size = new System.Drawing.Size(466, 22);
             this.textBoxDeutch.TabIndex = 5;
             this.textBoxDeutch.TextChanged += new System.EventHandler(this.textBoxDeutch_TextChanged);
             // 
@@ -534,7 +534,7 @@
             this.textBoxFrench.Location = new System.Drawing.Point(187, 119);
             this.textBoxFrench.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxFrench.Name = "textBoxFrench";
-            this.textBoxFrench.Size = new System.Drawing.Size(467, 22);
+            this.textBoxFrench.Size = new System.Drawing.Size(466, 22);
             this.textBoxFrench.TabIndex = 3;
             this.textBoxFrench.TextChanged += new System.EventHandler(this.textBoxFrench_TextChanged);
             // 
@@ -544,7 +544,7 @@
             this.textBoxEnglish.Location = new System.Drawing.Point(187, 84);
             this.textBoxEnglish.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxEnglish.Name = "textBoxEnglish";
-            this.textBoxEnglish.Size = new System.Drawing.Size(467, 22);
+            this.textBoxEnglish.Size = new System.Drawing.Size(466, 22);
             this.textBoxEnglish.TabIndex = 0;
             this.textBoxEnglish.TextChanged += new System.EventHandler(this.textBoxEnglish_TextChanged);
             // 
@@ -640,7 +640,7 @@
             // 
             // buttonChoosePicture
             // 
-            this.buttonChoosePicture.Location = new System.Drawing.Point(662, 324);
+            this.buttonChoosePicture.Location = new System.Drawing.Point(661, 324);
             this.buttonChoosePicture.Margin = new System.Windows.Forms.Padding(4);
             this.buttonChoosePicture.Name = "buttonChoosePicture";
             this.buttonChoosePicture.Size = new System.Drawing.Size(51, 25);
@@ -671,7 +671,7 @@
             // 
             // pictureBoxCategoryPicture
             // 
-            this.pictureBoxCategoryPicture.Location = new System.Drawing.Point(726, 324);
+            this.pictureBoxCategoryPicture.Location = new System.Drawing.Point(725, 324);
             this.pictureBoxCategoryPicture.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxCategoryPicture.Name = "pictureBoxCategoryPicture";
             this.pictureBoxCategoryPicture.Size = new System.Drawing.Size(105, 46);
@@ -680,7 +680,7 @@
             // 
             // buttonOpenDir
             // 
-            this.buttonOpenDir.Location = new System.Drawing.Point(662, 4);
+            this.buttonOpenDir.Location = new System.Drawing.Point(661, 4);
             this.buttonOpenDir.Margin = new System.Windows.Forms.Padding(4);
             this.buttonOpenDir.Name = "buttonOpenDir";
             this.buttonOpenDir.Size = new System.Drawing.Size(54, 28);
@@ -700,7 +700,7 @@
             this.imageListView1.Location = new System.Drawing.Point(4, 411);
             this.imageListView1.Margin = new System.Windows.Forms.Padding(4);
             this.imageListView1.Name = "imageListView1";
-            this.imageListView1.Size = new System.Drawing.Size(856, 79);
+            this.imageListView1.Size = new System.Drawing.Size(856, 82);
             this.imageListView1.TabIndex = 1;
             this.imageListView1.DropFiles += new Manina.Windows.Forms.DropFilesEventHandler(this.imageListView1_DropFiles);
             this.imageListView1.SelectionChanged += new System.EventHandler(this.imageListView1_SelectionChanged);
@@ -978,7 +978,7 @@
             this.imageListView2.Location = new System.Drawing.Point(0, 295);
             this.imageListView2.Margin = new System.Windows.Forms.Padding(4);
             this.imageListView2.Name = "imageListView2";
-            this.imageListView2.Size = new System.Drawing.Size(868, 456);
+            this.imageListView2.Size = new System.Drawing.Size(868, 458);
             this.imageListView2.TabIndex = 2;
             this.imageListView2.SelectionChanged += new System.EventHandler(this.imageListView2_SelectionChanged);
             // 
@@ -1160,7 +1160,7 @@
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27.83171F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 72.16828F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 43F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 217F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 218F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.Controls.Add(this.textBoxInfoSpanish, 1, 4);
@@ -1198,7 +1198,7 @@
             // textBoxInfoSpanish
             // 
             this.textBoxInfoSpanish.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxInfoSpanish.Location = new System.Drawing.Point(144, 225);
+            this.textBoxInfoSpanish.Location = new System.Drawing.Point(143, 225);
             this.textBoxInfoSpanish.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxInfoSpanish.Name = "textBoxInfoSpanish";
             this.textBoxInfoSpanish.Size = new System.Drawing.Size(355, 22);
@@ -1218,7 +1218,7 @@
             // textBoxInfoItalian
             // 
             this.textBoxInfoItalian.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxInfoItalian.Location = new System.Drawing.Point(144, 173);
+            this.textBoxInfoItalian.Location = new System.Drawing.Point(143, 173);
             this.textBoxInfoItalian.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxInfoItalian.Name = "textBoxInfoItalian";
             this.textBoxInfoItalian.Size = new System.Drawing.Size(355, 22);
@@ -1238,7 +1238,7 @@
             // textBoxInfoDeutch
             // 
             this.textBoxInfoDeutch.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxInfoDeutch.Location = new System.Drawing.Point(144, 120);
+            this.textBoxInfoDeutch.Location = new System.Drawing.Point(143, 120);
             this.textBoxInfoDeutch.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxInfoDeutch.Name = "textBoxInfoDeutch";
             this.textBoxInfoDeutch.Size = new System.Drawing.Size(355, 22);
@@ -1258,7 +1258,7 @@
             // textBoxInfoFrench
             // 
             this.textBoxInfoFrench.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxInfoFrench.Location = new System.Drawing.Point(144, 61);
+            this.textBoxInfoFrench.Location = new System.Drawing.Point(143, 61);
             this.textBoxInfoFrench.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxInfoFrench.Name = "textBoxInfoFrench";
             this.textBoxInfoFrench.Size = new System.Drawing.Size(355, 22);
@@ -1268,7 +1268,7 @@
             // textBoxInfoEnglish
             // 
             this.textBoxInfoEnglish.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxInfoEnglish.Location = new System.Drawing.Point(144, 4);
+            this.textBoxInfoEnglish.Location = new System.Drawing.Point(143, 4);
             this.textBoxInfoEnglish.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxInfoEnglish.Name = "textBoxInfoEnglish";
             this.textBoxInfoEnglish.Size = new System.Drawing.Size(355, 22);
@@ -1308,7 +1308,7 @@
             // textBoxPictureInfo
             // 
             this.textBoxPictureInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxPictureInfo.Location = new System.Drawing.Point(144, 276);
+            this.textBoxPictureInfo.Location = new System.Drawing.Point(143, 276);
             this.textBoxPictureInfo.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxPictureInfo.Name = "textBoxPictureInfo";
             this.textBoxPictureInfo.Size = new System.Drawing.Size(355, 22);
@@ -1317,7 +1317,7 @@
             // 
             // buttonChoosePictureInfo
             // 
-            this.buttonChoosePictureInfo.Location = new System.Drawing.Point(507, 276);
+            this.buttonChoosePictureInfo.Location = new System.Drawing.Point(506, 276);
             this.buttonChoosePictureInfo.Margin = new System.Windows.Forms.Padding(4);
             this.buttonChoosePictureInfo.Name = "buttonChoosePictureInfo";
             this.buttonChoosePictureInfo.Size = new System.Drawing.Size(34, 28);
@@ -1333,14 +1333,14 @@
             this.label19.Location = new System.Drawing.Point(4, 348);
             this.label19.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(132, 38);
+            this.label19.Size = new System.Drawing.Size(131, 38);
             this.label19.TabIndex = 14;
             this.label19.Text = "Url or Html file";
             // 
             // textBoxInfoUrl
             // 
             this.textBoxInfoUrl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxInfoUrl.Location = new System.Drawing.Point(144, 352);
+            this.textBoxInfoUrl.Location = new System.Drawing.Point(143, 352);
             this.textBoxInfoUrl.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxInfoUrl.Name = "textBoxInfoUrl";
             this.textBoxInfoUrl.Size = new System.Drawing.Size(355, 22);
@@ -1349,7 +1349,7 @@
             // 
             // pictureBoxInformation
             // 
-            this.pictureBoxInformation.Location = new System.Drawing.Point(550, 276);
+            this.pictureBoxInformation.Location = new System.Drawing.Point(549, 276);
             this.pictureBoxInformation.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxInformation.Name = "pictureBoxInformation";
             this.pictureBoxInformation.Size = new System.Drawing.Size(64, 67);
@@ -1358,7 +1358,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(506, 351);
+            this.button1.Location = new System.Drawing.Point(505, 351);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(37, 23);
             this.button1.TabIndex = 18;
@@ -1398,7 +1398,7 @@
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 28.08442F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 71.91558F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 53F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 380F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 381F));
             this.tableLayoutPanel4.Controls.Add(this.panelGradient, 1, 7);
             this.tableLayoutPanel4.Controls.Add(this.buttonChangeColorEnd, 2, 5);
             this.tableLayoutPanel4.Controls.Add(this.panelColorEnd, 1, 5);
@@ -1445,13 +1445,13 @@
             this.panelGradient.Location = new System.Drawing.Point(123, 424);
             this.panelGradient.Margin = new System.Windows.Forms.Padding(4);
             this.panelGradient.Name = "panelGradient";
-            this.panelGradient.Size = new System.Drawing.Size(299, 156);
+            this.panelGradient.Size = new System.Drawing.Size(298, 156);
             this.panelGradient.TabIndex = 20;
             this.panelGradient.Paint += new System.Windows.Forms.PaintEventHandler(this.panelGradient_Paint);
             // 
             // buttonChangeColorEnd
             // 
-            this.buttonChangeColorEnd.Location = new System.Drawing.Point(430, 302);
+            this.buttonChangeColorEnd.Location = new System.Drawing.Point(429, 302);
             this.buttonChangeColorEnd.Margin = new System.Windows.Forms.Padding(4);
             this.buttonChangeColorEnd.Name = "buttonChangeColorEnd";
             this.buttonChangeColorEnd.Size = new System.Drawing.Size(44, 28);
@@ -1471,7 +1471,7 @@
             // pictureBoxguiconfigLanguage
             // 
             this.pictureBoxguiconfigLanguage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.pictureBoxguiconfigLanguage.Location = new System.Drawing.Point(483, 193);
+            this.pictureBoxguiconfigLanguage.Location = new System.Drawing.Point(482, 193);
             this.pictureBoxguiconfigLanguage.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxguiconfigLanguage.Name = "pictureBoxguiconfigLanguage";
             this.pictureBoxguiconfigLanguage.Size = new System.Drawing.Size(97, 65);
@@ -1481,7 +1481,7 @@
             // pictureBoxguiconfigPhoto
             // 
             this.pictureBoxguiconfigPhoto.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.pictureBoxguiconfigPhoto.Location = new System.Drawing.Point(483, 120);
+            this.pictureBoxguiconfigPhoto.Location = new System.Drawing.Point(482, 120);
             this.pictureBoxguiconfigPhoto.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxguiconfigPhoto.Name = "pictureBoxguiconfigPhoto";
             this.pictureBoxguiconfigPhoto.Size = new System.Drawing.Size(97, 65);
@@ -1504,13 +1504,13 @@
             this.textBoxguiconfigInfo.Location = new System.Drawing.Point(123, 47);
             this.textBoxguiconfigInfo.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxguiconfigInfo.Name = "textBoxguiconfigInfo";
-            this.textBoxguiconfigInfo.Size = new System.Drawing.Size(299, 22);
+            this.textBoxguiconfigInfo.Size = new System.Drawing.Size(298, 22);
             this.textBoxguiconfigInfo.TabIndex = 1;
             this.textBoxguiconfigInfo.TextChanged += new System.EventHandler(this.textBoxguiconfigInfo_TextChanged);
             // 
             // buttonDialogImgInfo
             // 
-            this.buttonDialogImgInfo.Location = new System.Drawing.Point(430, 47);
+            this.buttonDialogImgInfo.Location = new System.Drawing.Point(429, 47);
             this.buttonDialogImgInfo.Margin = new System.Windows.Forms.Padding(4);
             this.buttonDialogImgInfo.Name = "buttonDialogImgInfo";
             this.buttonDialogImgInfo.Size = new System.Drawing.Size(44, 28);
@@ -1535,13 +1535,13 @@
             this.textBoxguiconfigImagePhoto.Location = new System.Drawing.Point(123, 120);
             this.textBoxguiconfigImagePhoto.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxguiconfigImagePhoto.Name = "textBoxguiconfigImagePhoto";
-            this.textBoxguiconfigImagePhoto.Size = new System.Drawing.Size(299, 22);
+            this.textBoxguiconfigImagePhoto.Size = new System.Drawing.Size(298, 22);
             this.textBoxguiconfigImagePhoto.TabIndex = 4;
             this.textBoxguiconfigImagePhoto.TextChanged += new System.EventHandler(this.textBoxguiconfigImagePhoto_TextChanged);
             // 
             // buttonFindImagePhoto
             // 
-            this.buttonFindImagePhoto.Location = new System.Drawing.Point(430, 120);
+            this.buttonFindImagePhoto.Location = new System.Drawing.Point(429, 120);
             this.buttonFindImagePhoto.Margin = new System.Windows.Forms.Padding(4);
             this.buttonFindImagePhoto.Name = "buttonFindImagePhoto";
             this.buttonFindImagePhoto.Size = new System.Drawing.Size(44, 28);
@@ -1566,13 +1566,13 @@
             this.textBoxguiconfigLanguage.Location = new System.Drawing.Point(123, 193);
             this.textBoxguiconfigLanguage.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxguiconfigLanguage.Name = "textBoxguiconfigLanguage";
-            this.textBoxguiconfigLanguage.Size = new System.Drawing.Size(299, 22);
+            this.textBoxguiconfigLanguage.Size = new System.Drawing.Size(298, 22);
             this.textBoxguiconfigLanguage.TabIndex = 7;
             this.textBoxguiconfigLanguage.TextChanged += new System.EventHandler(this.textBoxguiconfigLanguage_TextChanged);
             // 
             // buttonFindImageLanguage
             // 
-            this.buttonFindImageLanguage.Location = new System.Drawing.Point(430, 193);
+            this.buttonFindImageLanguage.Location = new System.Drawing.Point(429, 193);
             this.buttonFindImageLanguage.Margin = new System.Windows.Forms.Padding(4);
             this.buttonFindImageLanguage.Name = "buttonFindImageLanguage";
             this.buttonFindImageLanguage.Size = new System.Drawing.Size(44, 28);
@@ -1601,7 +1601,7 @@
             // 
             // buttonChangeStartColor
             // 
-            this.buttonChangeStartColor.Location = new System.Drawing.Point(430, 266);
+            this.buttonChangeStartColor.Location = new System.Drawing.Point(429, 266);
             this.buttonChangeStartColor.Margin = new System.Windows.Forms.Padding(4);
             this.buttonChangeStartColor.Name = "buttonChangeStartColor";
             this.buttonChangeStartColor.Size = new System.Drawing.Size(44, 28);
@@ -1623,7 +1623,7 @@
             // pictureBoxGuiInfo
             // 
             this.pictureBoxGuiInfo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.pictureBoxGuiInfo.Location = new System.Drawing.Point(483, 47);
+            this.pictureBoxGuiInfo.Location = new System.Drawing.Point(482, 47);
             this.pictureBoxGuiInfo.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxGuiInfo.Name = "pictureBoxGuiInfo";
             this.pictureBoxGuiInfo.Size = new System.Drawing.Size(97, 65);
